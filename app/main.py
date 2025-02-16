@@ -1,16 +1,15 @@
 from kivy.app import App
-from kivy.uix.button import Button
-
-from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
 import requests
+import json
 
-class ImageUploaderApp(App):
-    def build(self):
+class ZephAPP(App):
+    def build(self):# providenciar a foto
         self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
         # Botão para selecionar a imagem
@@ -20,9 +19,14 @@ class ImageUploaderApp(App):
         # Label para mostrar o status
         self.status_label = Label(text="Nenhuma imagem selecionada", size_hint=(1, 0.1))
 
+        # Label para exibir o JSON de resposta
+        self.json_label = Label(text="Resposta do servidor aparecerá aqui...", size_hint=(1, 0.6), halign='left', valign='top')
+        self.json_label.bind(size=self.json_label.setter('text_size'))  # Ajusta o tamanho do texto
+
         # Adiciona os widgets ao layout
         self.layout.add_widget(self.select_button)
         self.layout.add_widget(self.status_label)
+        self.layout.add_widget(self.json_label)
 
         return self.layout
 
@@ -41,7 +45,7 @@ class ImageUploaderApp(App):
             self.status_label.text = f"Imagem selecionada: {self.selected_image}"
             self.popup.dismiss()
 
-            # Envia a imagem para o servidor Flask
+            # Envia a imagem para o servidor
             self.upload_image(self.selected_image)
 
     def upload_image(self, image_path):
@@ -49,8 +53,12 @@ class ImageUploaderApp(App):
             with open(image_path, 'rb') as file:
                 files = {'file': file}
                 response = requests.post('http://127.0.0.1:5000/upload', files=files)
-
+            # melhorar essa exibição
             if response.status_code == 200:
+                # Exibe o JSON de resposta no Label
+                json_data = response.json()
+                formatted_json = json.dumps(json_data, indent=4)  # Formata o JSON para exibição
+                self.json_label.text = f"Resposta do servidor:\n{formatted_json}"
                 self.status_label.text = "Imagem enviada com sucesso!"
             else:
                 self.status_label.text = f"Erro ao enviar imagem: {response.json().get('error')}"
@@ -58,4 +66,4 @@ class ImageUploaderApp(App):
             self.status_label.text = f"Erro: {str(e)}"
 
 if __name__ == '__main__':
-    ImageUploaderApp().run()
+    ZephAPP().run()
