@@ -213,7 +213,7 @@ class FourthScreen(BaseScreen):
         super(FourthScreen, self).__init__(**kwargs)
         self.content_layout.add_widget(Label(text="Esta é a Tela 4", font_size=24))
 
-# Tela 5 - Perfil do Usuário
+# Tela 5 - Menu do Usuário
 class FifthScreen(BaseScreen):
     def __init__(self, **kwargs):
         super(FifthScreen, self).__init__(**kwargs)
