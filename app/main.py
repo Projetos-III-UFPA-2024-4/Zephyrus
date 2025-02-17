@@ -1,42 +1,139 @@
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
+from kivy.utils import get_color_from_hex
 import requests
 import json
 
-class ZephApp(App):
-    def build(self):
-        # Define o tamanho da janela
-        Window.size = (400, 600)
+# Classe base para as telas
+class BaseScreen(Screen):
+    def __init__(self, **kwargs):
+        super(BaseScreen, self).__init__(**kwargs)
 
-        # Layout principal
-        self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        # Layout principal da tela
+        main_layout = BoxLayout(orientation='vertical')
 
-        # Botão para selecionar a imagem
-        self.select_button = Button(text="Selecionar Imagem", size_hint=(1, 0.1))
+        # Conteúdo da tela (será sobrescrito pelas classes filhas)
+        self.content_layout = BoxLayout(orientation='vertical', size_hint=(1, 0.8))
+        main_layout.add_widget(self.content_layout)
+
+        # Barra de navegação inferior com 5 botões
+        self.bottom_bar = BoxLayout(
+            size_hint=(1, 0.1),  # Ocupa 10% da altura da tela
+            padding=10,
+            spacing=10
+        )
+
+        # Botões de navegação
+        self.btn_tela_1 = Button(
+            text="Foto",
+            size_hint=(0.2, 1),  # Ocupa 20% da largura da barra
+            background_color=get_color_from_hex("#FFFFFF"),  # Branco
+            color=get_color_from_hex("#000000")  # Texto preto
+        )
+        self.btn_tela_1.bind(on_press=lambda x: self.go_to_screen("first_screen"))
+
+        self.btn_tela_2 = Button(
+            text="Tela 2",
+            size_hint=(0.2, 1),
+            background_color=get_color_from_hex("#FFFFFF"),  # Branco
+            color=get_color_from_hex("#000000")
+        )
+        self.btn_tela_2.bind(on_press=lambda x: self.go_to_screen("second_screen"))
+
+        self.btn_tela_3 = Button(
+            text="Tela 3",
+            size_hint=(0.2, 1),
+            background_color=get_color_from_hex("#FFFFFF"),  # Branco
+            color=get_color_from_hex("#000000")
+        )
+        self.btn_tela_3.bind(on_press=lambda x: self.go_to_screen("third_screen"))
+
+        self.btn_tela_4 = Button(
+            text="Tela 4",
+            size_hint=(0.2, 1),
+            background_color=get_color_from_hex("#FFFFFF"),  # Branco
+            color=get_color_from_hex("#000000")
+        )
+        self.btn_tela_4.bind(on_press=lambda x: self.go_to_screen("fourth_screen"))
+
+        self.btn_tela_5 = Button(
+            text="Perfil",
+            size_hint=(0.2, 1),
+            background_color=get_color_from_hex("#FFFFFF"),  # Branco
+            color=get_color_from_hex("#000000")
+        )
+        self.btn_tela_5.bind(on_press=lambda x: self.go_to_screen("fifth_screen"))
+
+        # Adiciona os botões à barra de navegação
+        self.bottom_bar.add_widget(self.btn_tela_2)
+        self.bottom_bar.add_widget(self.btn_tela_3)
+        self.bottom_bar.add_widget(self.btn_tela_1)
+        self.bottom_bar.add_widget(self.btn_tela_4)
+        self.bottom_bar.add_widget(self.btn_tela_5)
+
+        # Adiciona a barra de navegação ao layout principal
+        main_layout.add_widget(self.bottom_bar)
+
+        # Adiciona o layout principal à tela
+        self.add_widget(main_layout)
+
+    def go_to_screen(self, screen_name):
+        # Muda para a tela especificada
+        self.manager.current = screen_name
+
+    def update_button_colors(self, current_screen):
+        # Atualiza as cores dos botões com base na tela atual
+        buttons = {
+            "first_screen": self.btn_tela_1,
+            "second_screen": self.btn_tela_2,
+            "third_screen": self.btn_tela_3,
+            "fourth_screen": self.btn_tela_4,
+            "fifth_screen": self.btn_tela_5,
+        }
+
+        for screen_name, button in buttons.items():
+            if screen_name == current_screen:
+                button.background_color = get_color_from_hex("#8159EC")  # Roxo
+                button.color = get_color_from_hex("#FFFFFF")  # Texto branco
+            else:
+                button.background_color = get_color_from_hex("#FFFFFF")  # Branco
+                button.color = get_color_from_hex("#000000")  # Texto preto
+
+# Primeira tela
+class TelaDafoto(BaseScreen):
+    def __init__(self, **kwargs):
+        super(TelaDafoto, self).__init__(**kwargs)
+
+        # Botão para selecionar a imagem (parte superior)
+        self.select_button = Button(
+            text="Selecionar Imagem", 
+            size_hint=(1, 0.1),
+            background_color=get_color_from_hex("#8159EC"),  # Roxo
+            color=get_color_from_hex("#FFFFFF")  # Texto branco
+        )
         self.select_button.bind(on_press=self.show_file_chooser)
+
+        # Conteúdo da tela (ScrollView e GridLayout para exibir o JSON)
+        self.scroll_view = ScrollView(size_hint=(1, 0.7))
+        self.grid_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
+        self.grid_layout.bind(minimum_height=self.grid_layout.setter('height'))
+        self.scroll_view.add_widget(self.grid_layout)
 
         # Label para mostrar o status
         self.status_label = Label(text="Nenhuma imagem selecionada", size_hint=(1, 0.1))
 
-        # ScrollView para exibir o JSON de resposta
-        self.scroll_view = ScrollView(size_hint=(1, 0.8))
-        self.grid_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
-        self.grid_layout.bind(minimum_height=self.grid_layout.setter('height'))
-
-        # Adiciona os widgets ao layout
-        self.scroll_view.add_widget(self.grid_layout)
-        self.layout.add_widget(self.select_button)
-        self.layout.add_widget(self.status_label)
-        self.layout.add_widget(self.scroll_view)
-
-        return self.layout
+        # Adiciona os widgets ao layout de conteúdo
+        self.content_layout.add_widget(self.select_button)
+        self.content_layout.add_widget(self.scroll_view)
+        self.content_layout.add_widget(self.status_label)
 
     def show_file_chooser(self, instance):
         # Cria um FileChooser para selecionar a imagem
@@ -100,5 +197,58 @@ class ZephApp(App):
         label.bind(size=label.setter('text_size'))  # Ajusta o tamanho do texto
         self.grid_layout.add_widget(label)
 
+# Telas adicionais (simples, apenas para exemplo)
+class SecondScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super(SecondScreen, self).__init__(**kwargs)
+        self.content_layout.add_widget(Label(text="Esta é a Tela 2", font_size=24))
+
+class ThirdScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super(ThirdScreen, self).__init__(**kwargs)
+        self.content_layout.add_widget(Label(text="Esta é a Tela 3", font_size=24))
+
+class FourthScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super(FourthScreen, self).__init__(**kwargs)
+        self.content_layout.add_widget(Label(text="Esta é a Tela 4", font_size=24))
+
+class FifthScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super(FifthScreen, self).__init__(**kwargs)
+        self.content_layout.add_widget(Label(text="Esta é a Tela 5", font_size=24))
+
+# App principal
+class ZephApp(App):
+    def build(self):
+        # Cria o gerenciador de telas
+        sm = ScreenManager()
+
+        # Adiciona as telas ao gerenciador
+        sm.add_widget(TelaDafoto(name="first_screen"))
+        sm.add_widget(SecondScreen(name="second_screen"))
+        sm.add_widget(ThirdScreen(name="third_screen"))
+        sm.add_widget(FourthScreen(name="fourth_screen"))
+        sm.add_widget(FifthScreen(name="fifth_screen"))
+
+        # Define a tela inicial
+        sm.current = "first_screen"
+
+        # Atualiza as cores dos botões na tela inicial
+        for screen in sm.screens:
+            if isinstance(screen, BaseScreen):
+                screen.update_button_colors(sm.current)
+
+        # Monitora a mudança de tela para atualizar as cores dos botões
+        sm.bind(current=self.on_screen_change)
+
+        return sm
+
+    def on_screen_change(self, instance, value):
+        # Atualiza as cores dos botões sempre que a tela muda
+        for screen in instance.screens:
+            if isinstance(screen, BaseScreen):
+                screen.update_button_colors(value)
+
 if __name__ == '__main__':
- ZephApp().run()
+    ZephApp().run()

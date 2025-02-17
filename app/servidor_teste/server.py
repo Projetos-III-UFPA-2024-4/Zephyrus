@@ -29,7 +29,7 @@ def upload_image():
         "calorias": "220kcal",
         "gordura": "100g",
         "carboidratos": "49g",
-        "detalhes": "Um hambúrguer é um sanduíche composto por um ou ",
+        "detalhes": "Um hambúrguer é um sanduíche composto por um ou ...",
         "sua dieta": "A quantidade de carboidratos excede os limites de sua prescrição",
         
     }
