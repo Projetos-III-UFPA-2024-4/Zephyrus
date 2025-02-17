@@ -213,10 +213,63 @@ class FourthScreen(BaseScreen):
         super(FourthScreen, self).__init__(**kwargs)
         self.content_layout.add_widget(Label(text="Esta é a Tela 4", font_size=24))
 
+# Tela 5 - Perfil do Usuário
 class FifthScreen(BaseScreen):
     def __init__(self, **kwargs):
         super(FifthScreen, self).__init__(**kwargs)
-        self.content_layout.add_widget(Label(text="Esta é a Tela 5", font_size=24))
+
+        # Layout principal da tela
+        main_layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+
+        # Cabeçalho do perfil
+        header_layout = BoxLayout(orientation='vertical', size_hint=(1, 0.3))
+        profile_name = Label(
+            text="Shambhavi Mishra",
+            font_size=24,
+            bold=True,
+            size_hint=(1, 0.5),
+            color=get_color_from_hex("#FFFFFF")
+        )
+        profile_role = Label(
+            text="Food Blogger",
+            font_size=18,
+            size_hint=(1, 0.5),
+            color=get_color_from_hex("#666666")
+        )
+        header_layout.add_widget(profile_name)
+        header_layout.add_widget(profile_role)
+        main_layout.add_widget(header_layout)
+
+        # Opções do perfil (usando ScrollView para rolagem)
+        options_scroll = ScrollView(size_hint=(1, 0.7))
+        options_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
+        options_layout.bind(minimum_height=options_layout.setter('height'))
+
+        # Função para criar um botão clicável
+        def create_button(text):
+            button = Button(
+                text=text,
+                size_hint_y=None,
+                height=50,
+                background_color=get_color_from_hex("#FFFFFF"),  # Fundo branco
+                color=get_color_from_hex("#000000"),  # Texto preto
+                background_normal="",  # Remove o fundo padrão
+                border=(0, 0, 0, 0)  # Remove a borda
+            )
+            return button
+
+        # Adiciona os botões ao layout
+        options_layout.add_widget(create_button("Editar perfil ➤"))
+        options_layout.add_widget(create_button("Planos de renovação ➤"))
+        options_layout.add_widget(create_button("Configurações ➤"))
+        options_layout.add_widget(create_button("Termos e política de privacidade ➤"))
+        options_layout.add_widget(create_button("Sair ➤"))
+
+        options_scroll.add_widget(options_layout)
+        main_layout.add_widget(options_scroll)
+
+        # Adiciona o layout principal à tela
+        self.add_widget(main_layout)
 
 # App principal
 class ZephApp(App):
