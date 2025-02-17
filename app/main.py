@@ -20,6 +20,7 @@ class BaseScreen(Screen):
         # Layout principal da tela
         main_layout = BoxLayout(orientation='vertical')
 
+
         # Conteúdo da tela (será sobrescrito pelas classes filhas)
         self.content_layout = BoxLayout(orientation='vertical', size_hint=(1, 0.8))
         main_layout.add_widget(self.content_layout)
@@ -257,9 +258,20 @@ class FifthScreen(BaseScreen):
                 border=(0, 0, 0, 0)  # Remove a borda
             )
             return button
+            
+        self.btn_perfil = Button(
+            text="Editar perfil ➤",
+            size_hint_y=None,
+            height=50,
+            background_color=get_color_from_hex("#FFFFFF"),  # Fundo branco
+            color=get_color_from_hex("#000000"),  # Texto preto
+            background_normal="",  # Remove o fundo padrão
+            border=(0, 0, 0, 0)  # Remove a borda
+        )
+        self.btn_perfil.bind(on_press=lambda x: self.go_to_screen("profile_screen"))
 
         # Adiciona os botões ao layout
-        options_layout.add_widget(create_button("Editar perfil ➤"))
+        options_layout.add_widget(self.btn_perfil)
         options_layout.add_widget(create_button("Planos de renovação ➤"))
         options_layout.add_widget(create_button("Configurações ➤"))
         options_layout.add_widget(create_button("Termos e política de privacidade ➤"))
@@ -270,6 +282,15 @@ class FifthScreen(BaseScreen):
 
         # Adiciona o layout principal à tela
         self.add_widget(main_layout)
+
+class ProfileScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super(ProfileScreen, self).__init__(**kwargs)
+
+
+
+        self.content_layout.add_widget(Label(text="Esta é a Tela do perfil", font_size=24))
+
 
 # App principal
 class ZephApp(App):
@@ -283,6 +304,7 @@ class ZephApp(App):
         sm.add_widget(ThirdScreen(name="third_screen"))
         sm.add_widget(FourthScreen(name="fourth_screen"))
         sm.add_widget(FifthScreen(name="fifth_screen"))
+        sm.add_widget(ProfileScreen(name="profile_screen"))
 
         # Define a tela inicial
         sm.current = "first_screen"
