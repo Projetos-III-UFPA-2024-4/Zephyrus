@@ -9,95 +9,25 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
+from kivy.uix.textinput import TextInput
 import requests
 import json
 
 # Classe base para as telas
 class BaseScreen(Screen):
-    def __init__(self, **kwargs):
-        super(BaseScreen, self).__init__(**kwargs)
-
-        # Layout principal da tela
-        main_layout = BoxLayout(orientation='vertical')
-
-
-        # Conteúdo da tela (será sobrescrito pelas classes filhas)
-        self.content_layout = BoxLayout(orientation='vertical', size_hint=(1, 0.8))
-        main_layout.add_widget(self.content_layout)
-
-        # Barra de navegação inferior com 5 botões
-        self.bottom_bar = BoxLayout(
-            size_hint=(1, 0.1),  # Ocupa 10% da altura da tela
-            padding=10,
-            spacing=10
-        )
-
-        # Botões de navegação
-        self.btn_tela_1 = Button(
-            text="Foto",
-            size_hint=(0.2, 1),  # Ocupa 20% da largura da barra
-            background_color=get_color_from_hex("#FFFFFF"),  # Branco
-            color=get_color_from_hex("#000000")  # Texto preto
-        )
-        self.btn_tela_1.bind(on_press=lambda x: self.go_to_screen("first_screen"))
-
-        self.btn_tela_2 = Button(
-            text="Tela 2",
-            size_hint=(0.2, 1),
-            background_color=get_color_from_hex("#FFFFFF"),  # Branco
-            color=get_color_from_hex("#000000")
-        )
-        self.btn_tela_2.bind(on_press=lambda x: self.go_to_screen("second_screen"))
-
-        self.btn_tela_3 = Button(
-            text="Tela 3",
-            size_hint=(0.2, 1),
-            background_color=get_color_from_hex("#FFFFFF"),  # Branco
-            color=get_color_from_hex("#000000")
-        )
-        self.btn_tela_3.bind(on_press=lambda x: self.go_to_screen("third_screen"))
-
-        self.btn_tela_4 = Button(
-            text="Tela 4",
-            size_hint=(0.2, 1),
-            background_color=get_color_from_hex("#FFFFFF"),  # Branco
-            color=get_color_from_hex("#000000")
-        )
-        self.btn_tela_4.bind(on_press=lambda x: self.go_to_screen("fourth_screen"))
-
-        self.btn_tela_5 = Button(
-            text="Perfil",
-            size_hint=(0.2, 1),
-            background_color=get_color_from_hex("#FFFFFF"),  # Branco
-            color=get_color_from_hex("#000000")
-        )
-        self.btn_tela_5.bind(on_press=lambda x: self.go_to_screen("fifth_screen"))
-
-        # Adiciona os botões à barra de navegação
-        self.bottom_bar.add_widget(self.btn_tela_2)
-        self.bottom_bar.add_widget(self.btn_tela_3)
-        self.bottom_bar.add_widget(self.btn_tela_1)
-        self.bottom_bar.add_widget(self.btn_tela_4)
-        self.bottom_bar.add_widget(self.btn_tela_5)
-
-        # Adiciona a barra de navegação ao layout principal
-        main_layout.add_widget(self.bottom_bar)
-
-        # Adiciona o layout principal à tela
-        self.add_widget(main_layout)
-
     def go_to_screen(self, screen_name):
-        # Muda para a tela especificada
         self.manager.current = screen_name
 
+    def get_color_from_hex(self, hex_color):
+        return get_color_from_hex(hex_color)
+
     def update_button_colors(self, current_screen):
-        # Atualiza as cores dos botões com base na tela atual
         buttons = {
-            "first_screen": self.btn_tela_1,
-            "second_screen": self.btn_tela_2,
-            "third_screen": self.btn_tela_3,
-            "fourth_screen": self.btn_tela_4,
-            "fifth_screen": self.btn_tela_5,
+            "first_screen": self.ids.btn_tela_1,
+            "second_screen": self.ids.btn_tela_2,
+            "third_screen": self.ids.btn_tela_3,
+            "fourth_screen": self.ids.btn_tela_4,
+            "fifth_screen": self.ids.btn_tela_5,
         }
 
         for screen_name, button in buttons.items():
@@ -110,48 +40,20 @@ class BaseScreen(Screen):
 
 # Primeira tela
 class TelaDafoto(BaseScreen):
-    def __init__(self, **kwargs):
-        super(TelaDafoto, self).__init__(**kwargs)
-
-        # Botão para selecionar a imagem (parte superior)
-        self.select_button = Button(
-            text="Selecionar Imagem", 
-            size_hint=(1, 0.1),
-            background_color=get_color_from_hex("#8159EC"),  # Roxo
-            color=get_color_from_hex("#FFFFFF")  # Texto branco
-        )
-        self.select_button.bind(on_press=self.show_file_chooser)
-
-        # Conteúdo da tela (ScrollView e GridLayout para exibir o JSON)
-        self.scroll_view = ScrollView(size_hint=(1, 0.7))
-        self.grid_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
-        self.grid_layout.bind(minimum_height=self.grid_layout.setter('height'))
-        self.scroll_view.add_widget(self.grid_layout)
-
-        # Label para mostrar o status
-        self.status_label = Label(text="Nenhuma imagem selecionada", size_hint=(1, 0.1))
-
-        # Adiciona os widgets ao layout de conteúdo
-        self.content_layout.add_widget(self.select_button)
-        self.content_layout.add_widget(self.scroll_view)
-        self.content_layout.add_widget(self.status_label)
-
-    def show_file_chooser(self, instance):
-        # Cria um FileChooser para selecionar a imagem
+    def show_file_chooser(self):
         self.file_chooser = FileChooserListView(path='.', filters=['*.png', '*.jpg', '*.jpeg'])
         self.file_chooser.bind(on_submit=self.select_image)
 
-        # Cria um Popup para exibir o FileChooser
         self.popup = Popup(title="Selecione uma imagem", content=self.file_chooser, size_hint=(0.9, 0.9))
         self.popup.open()
+
+
 
     def select_image(self, instance, selection, *args):
         if selection:
             self.selected_image = selection[0]
-            self.status_label.text = f"Imagem selecionada: {self.selected_image}"
+            self.ids.status_label.text = f"Imagem selecionada: {self.selected_image}"
             self.popup.dismiss()
-
-            # Envia a imagem para o servidor Flask
             self.upload_image(self.selected_image)
 
     def upload_image(self, image_path):
@@ -161,19 +63,15 @@ class TelaDafoto(BaseScreen):
                 response = requests.post('http://127.0.0.1:5000/upload', files=files)
 
             if response.status_code == 200:
-                # Exibe o JSON de resposta de forma bonita
                 self.display_json(response.json())
-                self.status_label.text = "Imagem enviada com sucesso!"
+                self.ids.status_label.text = "Imagem enviada com sucesso!"
             else:
-                self.status_label.text = f"Erro ao enviar imagem: {response.json().get('error')}"
+                self.ids.status_label.text = f"Erro ao enviar imagem: {response.json().get('error')}"
         except Exception as e:
-            self.status_label.text = f"Erro: {str(e)}"
+            self.ids.status_label.text = f"Erro: {str(e)}"
 
     def display_json(self, json_data):
-        # Limpa o grid layout antes de adicionar novos widgets
-        self.grid_layout.clear_widgets()
-
-        # Adiciona cada campo do JSON ao grid layout
+        self.ids.grid_layout.clear_widgets()
         self.add_label("**Informações Nutricionais**", font_size=18, bold=True)
         self.add_label(f"Proteína: {json_data.get('proteina', 'N/A')}")
         self.add_label(f"Calorias: {json_data.get('calorias', 'N/A')}")
@@ -185,7 +83,6 @@ class TelaDafoto(BaseScreen):
         self.add_label(json_data.get('sua dieta', 'N/A'))
 
     def add_label(self, text, font_size=14, bold=False):
-        # Cria um label com o texto fornecido
         label = Label(
             text=text,
             size_hint_y=None,
@@ -195,110 +92,55 @@ class TelaDafoto(BaseScreen):
             halign='left',
             valign='middle'
         )
-        label.bind(size=label.setter('text_size'))  # Ajusta o tamanho do texto
-        self.grid_layout.add_widget(label)
+        label.bind(size=label.setter('text_size'))
+        self.ids.grid_layout.add_widget(label)
 
 # Telas adicionais (simples, apenas para exemplo)
 class SecondScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super(SecondScreen, self).__init__(**kwargs)
-        self.content_layout.add_widget(Label(text="Esta é a Tela 2", font_size=24))
+    pass
 
 class ThirdScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super(ThirdScreen, self).__init__(**kwargs)
-        self.content_layout.add_widget(Label(text="Esta é a Tela 3", font_size=24))
+    pass
 
 class FourthScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super(FourthScreen, self).__init__(**kwargs)
-        self.content_layout.add_widget(Label(text="Esta é a Tela 4", font_size=24))
+    pass
 
 # Tela 5 - Menu do Usuário
 class FifthScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super(FifthScreen, self).__init__(**kwargs)
+    pass
 
-        # Layout principal da tela
-        main_layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
-
-        # Cabeçalho do perfil
-        header_layout = BoxLayout(orientation='vertical', size_hint=(1, 0.3))
-        profile_name = Label(
-            text="Shambhavi Mishra",
-            font_size=24,
-            bold=True,
-            size_hint=(1, 0.5),
-            color=get_color_from_hex("#FFFFFF")
-        )
-        profile_role = Label(
-            text="Food Blogger",
-            font_size=18,
-            size_hint=(1, 0.5),
-            color=get_color_from_hex("#666666")
-        )
-        header_layout.add_widget(profile_name)
-        header_layout.add_widget(profile_role)
-        main_layout.add_widget(header_layout)
-
-        # Opções do perfil (usando ScrollView para rolagem)
-        options_scroll = ScrollView(size_hint=(1, 0.7))
-        options_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
-        options_layout.bind(minimum_height=options_layout.setter('height'))
-
-        # Função para criar um botão clicável
-        def create_button(text):
-            button = Button(
-                text=text,
-                size_hint_y=None,
-                height=50,
-                background_color=get_color_from_hex("#FFFFFF"),  # Fundo branco
-                color=get_color_from_hex("#000000"),  # Texto preto
-                background_normal="",  # Remove o fundo padrão
-                border=(0, 0, 0, 0)  # Remove a borda
-            )
-            return button
-            
-        self.btn_perfil = Button(
-            text="Editar perfil ➤",
-            size_hint_y=None,
-            height=50,
-            background_color=get_color_from_hex("#FFFFFF"),  # Fundo branco
-            color=get_color_from_hex("#000000"),  # Texto preto
-            background_normal="",  # Remove o fundo padrão
-            border=(0, 0, 0, 0)  # Remove a borda
-        )
-        self.btn_perfil.bind(on_press=lambda x: self.go_to_screen("profile_screen"))
-
-        # Adiciona os botões ao layout
-        options_layout.add_widget(self.btn_perfil)
-        options_layout.add_widget(create_button("Planos de renovação ➤"))
-        options_layout.add_widget(create_button("Configurações ➤"))
-        options_layout.add_widget(create_button("Termos e política de privacidade ➤"))
-        options_layout.add_widget(create_button("Sair ➤"))
-
-        options_scroll.add_widget(options_layout)
-        main_layout.add_widget(options_scroll)
-
-        # Adiciona o layout principal à tela
-        self.add_widget(main_layout)
-
+# Tela de Perfil
 class ProfileScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super(ProfileScreen, self).__init__(**kwargs)
+    def confirmar_dados(self):
+        dados = {
+            "name": self.ids.name_input.text,
+            "email": self.ids.email_input.text,
+            "senha": self.ids.senha_input.text,
+            "calorias": self.ids.calorias_input.text,
+            "carboidratos": self.ids.carboidratos_input.text,
+            "proteina": self.ids.proteina_input.text,
+        }
 
+        dados_json = json.dumps(dados, indent=4)
 
-
-        self.content_layout.add_widget(Label(text="Esta é a Tela do perfil", font_size=24))
-
+        try:
+            response = requests.post(
+                "http://127.0.0.1:5000/salvar_usuario",
+                json=dados,
+                headers={"Content-Type": "application/json"}
+            )
+            if response.status_code == 200:
+                print("Dados enviados com sucesso!")
+            else:
+                print(f"Erro ao enviar dados: {response.text}")
+        except Exception as e:
+            print(f"Erro: {str(e)}")
 
 # App principal
 class ZephApp(App):
     def build(self):
-        # Cria o gerenciador de telas
         sm = ScreenManager()
 
-        # Adiciona as telas ao gerenciador
         sm.add_widget(TelaDafoto(name="first_screen"))
         sm.add_widget(SecondScreen(name="second_screen"))
         sm.add_widget(ThirdScreen(name="third_screen"))
@@ -306,21 +148,17 @@ class ZephApp(App):
         sm.add_widget(FifthScreen(name="fifth_screen"))
         sm.add_widget(ProfileScreen(name="profile_screen"))
 
-        # Define a tela inicial
         sm.current = "first_screen"
 
-        # Atualiza as cores dos botões na tela inicial
         for screen in sm.screens:
             if isinstance(screen, BaseScreen):
                 screen.update_button_colors(sm.current)
 
-        # Monitora a mudança de tela para atualizar as cores dos botões
         sm.bind(current=self.on_screen_change)
 
         return sm
 
     def on_screen_change(self, instance, value):
-        # Atualiza as cores dos botões sempre que a tela muda
         for screen in instance.screens:
             if isinstance(screen, BaseScreen):
                 screen.update_button_colors(value)

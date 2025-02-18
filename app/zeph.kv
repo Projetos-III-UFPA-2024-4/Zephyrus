@@ -1,0 +1,324 @@
+<BaseScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            id: content_layout
+            orientation: 'vertical'
+            size_hint: (1, 0.8)
+
+        BoxLayout:
+            id: bottom_bar
+            size_hint: (1, 0.1)
+            padding: 10
+            spacing: 10
+
+            Button:
+                id: btn_tela_1
+                text: "Foto"
+                size_hint: (0.2, 1)
+                background_color: root.get_color_from_hex("#FFFFFF")
+                color: root.get_color_from_hex("#000000")
+                on_press: root.go_to_screen("first_screen")
+
+            Button:
+                id: btn_tela_2
+                text: "Tela 2"
+                size_hint: (0.2, 1)
+                background_color: root.get_color_from_hex("#FFFFFF")
+                color: root.get_color_from_hex("#000000")
+                on_press: root.go_to_screen("second_screen")
+
+            Button:
+                id: btn_tela_3
+                text: "Tela 3"
+                size_hint: (0.2, 1)
+                background_color: root.get_color_from_hex("#FFFFFF")
+                color: root.get_color_from_hex("#000000")
+                on_press: root.go_to_screen("third_screen")
+
+            Button:
+                id: btn_tela_4
+                text: "Tela 4"
+                size_hint: (0.2, 1)
+                background_color: root.get_color_from_hex("#FFFFFF")
+                color: root.get_color_from_hex("#000000")
+                on_press: root.go_to_screen("fourth_screen")
+
+            Button:
+                id: btn_tela_5
+                text: "Perfil"
+                size_hint: (0.2, 1)
+                background_color: root.get_color_from_hex("#FFFFFF")
+                color: root.get_color_from_hex("#000000")
+                on_press: root.go_to_screen("fifth_screen")
+
+<TelaDafoto>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            text: "Selecionar Imagem"
+            size_hint: (1, 0.1)
+            background_color: root.get_color_from_hex("#8159EC")
+            color: root.get_color_from_hex("#FFFFFF")
+            on_press: root.show_file_chooser()
+
+        ScrollView:
+            size_hint: (1, 0.7)
+
+            GridLayout:
+                id: grid_layout
+                cols: 1
+                size_hint_y: None
+                spacing: 10
+                padding: 10
+                height: self.minimum_height
+
+        Label:
+            id: status_label
+            text: "Nenhuma imagem selecionada"
+            size_hint: (1, 0.1) 
+
+<SecondScreen>:
+    BoxLayout:
+        Label:
+            text: "Esta é a Tela 2"
+            font_size: 24
+
+<ThirdScreen>:
+    BoxLayout:
+        Label:
+            text: "Esta é a Tela 3"
+            font_size: 24
+
+<FourthScreen>:
+    BoxLayout:
+        Label:
+            text: "Esta é a Tela 4"
+            font_size: 24
+
+<FifthScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1, 0.3)
+
+            Label:
+                text: "Shambhavi Mishra"
+                font_size: 24
+                bold: True
+                size_hint: (1, 0.5)
+                color: root.get_color_from_hex("#FFFFFF")
+
+            Label:
+                text: "Food Blogger"
+                font_size: 18
+                size_hint: (1, 0.5)
+                color: root.get_color_from_hex("#666666")
+
+        ScrollView:
+            size_hint: (1, 0.7)
+
+            GridLayout:
+                cols: 1
+                size_hint_y: None
+                spacing: 10
+                padding: 10
+                height: self.minimum_height
+
+                Button:
+                    text: "Editar perfil ➤"
+                    size_hint_y: None
+                    height: 50
+                    background_color: root.get_color_from_hex("#FFFFFF")
+                    color: root.get_color_from_hex("#000000")
+                    background_normal: ""
+                    border: (0, 0, 0, 0)
+                    on_press: root.go_to_screen("profile_screen")
+
+                Button:
+                    text: "Planos de renovação ➤"
+                    size_hint_y: None
+                    height: 50
+                    background_color: root.get_color_from_hex("#FFFFFF")
+                    color: root.get_color_from_hex("#000000")
+                    background_normal: ""
+                    border: (0, 0, 0, 0)
+
+                Button:
+                    text: "Configurações ➤"
+                    size_hint_y: None
+                    height: 50
+                    background_color: root.get_color_from_hex("#FFFFFF")
+                    color: root.get_color_from_hex("#000000")
+                    background_normal: ""
+                    border: (0, 0, 0, 0)
+
+                Button:
+                    text: "Termos e política de privacidade ➤"
+                    size_hint_y: None
+                    height: 50
+                    background_color: root.get_color_from_hex("#FFFFFF")
+                    color: root.get_color_from_hex("#000000")
+                    background_normal: ""
+                    border: (0, 0, 0, 0)
+
+                Button:
+                    text: "Sair ➤"
+                    size_hint_y: None
+                    height: 50
+                    background_color: root.get_color_from_hex("#FFFFFF")
+                    color: root.get_color_from_hex("#000000")
+                    background_normal: ""
+                    border: (0, 0, 0, 0)
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+
+        Label:
+            text: "Editar Perfil"
+            font_size: 24
+            bold: True
+            size_hint: (1, 0.1)
+            color: root.get_color_from_hex("#FFFFFF")
+
+        ScrollView:
+            size_hint: (1, 0.8)
+
+            GridLayout:
+                id: form_layout
+                cols: 1
+                size_hint_y: None
+                spacing: 10
+                padding: 10
+                height: self.minimum_height
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "Name"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: name_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "Name"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "E-mail"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: email_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "E-mail"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "Senha"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: senha_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "Senha"
+                        password: True
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "Calorias diárias"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: calorias_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "Kcal"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "Carboidratos diários"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: carboidratos_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "carbo"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 80
+
+                    Label:
+                        text: "Proteína diária"
+                        size_hint: (1, 0.4)
+                        halign: 'left'
+                        valign: 'middle'
+                        color: root.get_color_from_hex("#000000")
+                        size: self.texture_size
+
+                    TextInput:
+                        id: proteina_input
+                        size_hint: (1, 0.6)
+                        multiline: False
+                        hint_text: "protein"
+
+        Button:
+            text: "Confirme"
+            size_hint: (1, 0.1)
+            background_color: root.get_color_from_hex("#8159EC")
+            color: root.get_color_from_hex("#FFFFFF")
+            on_press: root.confirmar_dados()
