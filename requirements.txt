@@ -1,0 +1,37 @@
+# Lista de dependências do projeto
+
+# Framework para desenvolvimento app 
+kivy==2.1.0
+
+# Framework para desenvolvimento web 
+Flask==2.3.2
+
+# Biblioteca para manipulação de dados 
+pandas==2.0.3
+
+# Biblioteca para computação científica 
+numpy==1.24.3
+
+# Biblioteca para testes
+pytest==7.4.0
+
+# Biblioteca para cobertura de testes
+pytest-cov==4.1.0
+
+# Biblioteca para manipulação de datas
+python-dateutil==2.8.2
+
+# Biblioteca para requisições HTTP
+requests==2.31.0
+
+# Biblioteca para manipulação de variáveis de ambiente
+python-dotenv==1.0.0
+
+# Biblioteca para manipulação de arquivos CSV
+csvkit==1.1.1
+
+# Biblioteca para manipulação de arquivos JSON
+jsonlib-python3==1.6.1
+
+# Biblioteca para manipulação de arquivos YAML
+PyYAML==6.0
