@@ -9,6 +9,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
+from kivy.uix.textinput import TextInput
 import requests
 import json
 
@@ -283,13 +284,118 @@ class FifthScreen(BaseScreen):
         # Adiciona o layout principal à tela
         self.add_widget(main_layout)
 
-class ProfileScreen(BaseScreen):
+# Tela de Perfil
+class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super(ProfileScreen, self).__init__(**kwargs)
 
+        # Layout principal da tela
+        main_layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
 
+        # Título da tela
+        title_label = Label(
+            text="Editar Perfil",
+            font_size=24,
+            bold=True,
+            size_hint=(1, 0.1),
+            color=get_color_from_hex("#000000")
+        )
+        main_layout.add_widget(title_label)
 
-        self.content_layout.add_widget(Label(text="Esta é a Tela do perfil", font_size=24))
+        # Formulário (usando ScrollView para rolagem)
+        form_scroll = ScrollView(size_hint=(1, 0.8))
+        self.form_layout = GridLayout(cols=1, size_hint_y=None, spacing=10, padding=10)
+        self.form_layout.bind(minimum_height=self.form_layout.setter('height'))
+
+        def create_form_field(label_text, input_type="text", placeholder=""):
+            field_layout = BoxLayout(orientation='vertical', size_hint_y=None, height=80)
+            label = Label(
+                text=label_text,
+                size_hint=(1, 0.4),
+                halign='left',
+                valign='middle',
+                color=get_color_from_hex("#000000")
+            )
+            label.bind(size=label.setter('text_size'))  # Ajusta o tamanho do texto
+            input_field = TextInput(
+                size_hint=(1, 0.6),
+                multiline=False,
+                hint_text=placeholder,
+                password=(input_type == "password")  # Oculta o texto se for uma senha
+            )
+            field_layout.add_widget(label)
+            field_layout.add_widget(input_field)
+            return field_layout, input_field
+
+        # Adiciona os campos ao formulário e armazena os campos em uma lista
+        self.fields = {}
+        field, input_field = create_form_field("Name", placeholder="Name")
+        self.fields["name"] = input_field
+        self.form_layout.add_widget(field)
+
+        field, input_field = create_form_field("E-mail", placeholder="E-mail")
+        self.fields["email"] = input_field
+        self.form_layout.add_widget(field)
+
+        field, input_field = create_form_field("Senha", input_type="password", placeholder="Senha")
+        self.fields["senha"] = input_field
+        self.form_layout.add_widget(field)
+
+        field, input_field = create_form_field("Calorias diárias", placeholder="Kcal")
+        self.fields["calorias"] = input_field
+        self.form_layout.add_widget(field)
+
+        field, input_field = create_form_field("Carboidratos diários", placeholder="carbo")
+        self.fields["carboidratos"] = input_field
+        self.form_layout.add_widget(field)
+
+        field, input_field = create_form_field("Proteína diária", placeholder="protein")
+        self.fields["proteina"] = input_field
+        self.form_layout.add_widget(field)
+
+        form_scroll.add_widget(self.form_layout)
+        main_layout.add_widget(form_scroll)
+
+        # Botão "Confirme"
+        confirm_button = Button(
+            text="Confirme",
+            size_hint=(1, 0.1),
+            background_color=get_color_from_hex("#8159EC"),  # Roxo
+            color=get_color_from_hex("#FFFFFF")  # Texto branco
+        )
+        confirm_button.bind(on_press=self.confirmar_dados)  # Vincula a função ao botão
+        main_layout.add_widget(confirm_button)
+
+        # Adiciona o layout principal à tela
+        self.add_widget(main_layout)
+
+    def confirmar_dados(self, instance):
+        # Coleta os dados do formulário
+        dados = {
+            "name": self.fields["name"].text,
+            "email": self.fields["email"].text,
+            "senha": self.fields["senha"].text,
+            "calorias": self.fields["calorias"].text,
+            "carboidratos": self.fields["carboidratos"].text,
+            "proteina": self.fields["proteina"].text,
+        }
+
+        # Converte os dados para JSON
+        dados_json = json.dumps(dados, indent=4)
+
+        # Envia os dados para o servidor Flask
+        try:
+            response = requests.post(
+                "http://127.0.0.1:5000/salvar_usuario",
+                json=dados,
+                headers={"Content-Type": "application/json"}
+            )
+            if response.status_code == 200:
+                print("Dados enviados com sucesso!")
+            else:
+                print(f"Erro ao enviar dados: {response.text}")
+        except Exception as e:
+            print(f"Erro: {str(e)}")
 
 
 # App principal
