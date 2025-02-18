@@ -10,7 +10,6 @@ from kivy.uix.gridlayout import GridLayout # type: ignore
 from kivy.core.window import Window # type: ignore
 from kivy.utils import get_color_from_hex # type: ignore
 from kivy.uix.textinput import TextInput # type: ignore
-from kivy.uix.textinput import TextInput # type: ignore
 import requests # type: ignore
 import json
 
