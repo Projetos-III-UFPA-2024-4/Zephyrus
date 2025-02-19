@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Pasta para salvar as imagens recebidas
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = "uploads"
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
