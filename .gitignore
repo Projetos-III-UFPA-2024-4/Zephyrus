@@ -1,5 +1,10 @@
 app/servidor_teste/uploads
 app/servidor_teste/usuarios
+app/.buidozer/
+app/buildozer.spec
+app/buildozer_log.txt
+app/log.txt
 uploads
 usuarios
 venv
+img_teste1.png

@@ -39,5 +39,5 @@ clean:
 # Executar o projeto principal
 run:
 
-#	. $(VENV)/bin/activate && $(PYTHON) app/servidor_teste/server.py
+#	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
 	. $(VENV)/bin/activate && $(PYTHON) app/main.py
