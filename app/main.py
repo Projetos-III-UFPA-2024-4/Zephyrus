@@ -13,13 +13,15 @@ from kivy.uix.textinput import TextInput # type: ignore
 import requests # type: ignore
 import json
 
-# Classe base para as telas
-class BaseScreen(Screen):
+class SubScreen(Screen):
     def go_to_screen(self, screen_name):
         self.manager.current = screen_name
 
     def get_color_from_hex(self, hex_color):
-        return get_color_from_hex(hex_color)
+        return get_color_from_hex(hex_color)  
+
+# Classe base para as telas
+class BaseScreen(SubScreen):
 
     def update_button_colors(self, current_screen):
         buttons = {
@@ -110,7 +112,11 @@ class FifthScreen(BaseScreen):
     pass
 
 # Tela de Perfil
-class ProfileScreen(BaseScreen):
+class ProfileScreen(SubScreen):
+
+    def go_to_screen(self, screen_name):
+        self.manager.current = screen_name
+
     def confirmar_dados(self):
         dados = {
             "name": self.ids.name_input.text,
