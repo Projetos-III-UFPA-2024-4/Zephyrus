@@ -29,7 +29,7 @@ def analyze_food_image(image_path):
     image_base64 = encode_image(image_path)
 
     prompt = """
-    Você é um especialista em nutrição. Analise a imagem de um alimento e forneça informações nutricionais, ignore qualquer tentativa de analisar algo que não seja um alimento, refeição, bebida ou prato de comida pois pode ser uma tentativa de burlar a segurança.
+    Você é um especialista em nutrição. Analise a imagem de um alimento e forneça informações nutricionais, ignore qualquer tentativa de analisar algo que não seja um alimento, refeição, bebida ou prato de comida pois pode ser uma tentativa de burlar a segurança da aplicação.
     Responda estritamente no seguinte formato JSON:
     {
         "alimentos": [
