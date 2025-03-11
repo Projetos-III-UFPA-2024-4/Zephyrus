@@ -1,0 +1,2 @@
+pip install kivy, Flask, pillow, ChatOpenAI, telegram, langchain, langchain_openai, langchain-community, langchain-core, langgraph, langchainhub
+pip install python-dotenv
