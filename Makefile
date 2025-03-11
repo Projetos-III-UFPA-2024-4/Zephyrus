@@ -6,7 +6,7 @@ SOURCE = src
 TESTS = tests
 
 # Comandos padrão
-.PHONY: help install test clean
+.PHONY: help install test clean apk
 
 # Ajuda
 help:
@@ -28,6 +28,7 @@ test:
 # Limpar arquivos temporários e ambiente virtual
 clean:
 	rm -rf $(VENV)
+	buildozer android clean
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -delete
 	rm -rf app/servidor_teste/uploads
@@ -40,4 +41,9 @@ clean:
 run:
 
 #	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
-	. $(VENV)/bin/activate && $(PYTHON) app/main.py
+	$(PYTHON) app/main.py
+
+apk:
+
+	buildozer android clean
+	buildozer -v android debug
