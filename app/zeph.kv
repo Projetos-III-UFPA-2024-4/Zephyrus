@@ -1,333 +1,1291 @@
+#:import utils kivy.utils
+
+<RoundedButton@Button>:
+    background_normal: ''
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#8159EC") if self.state == 'normal' else utils.get_color_from_hex("#6a47d1")
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20]
+
+<CircleButton@Button>:
+    size_hint: None, None
+    size: "40dp", "40dp"
+    background_normal: ''
+    background_color: 0, 0, 0, 0
+    color: utils.get_color_from_hex("#8159EC")
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#F0F0F0") if self.state == 'normal' else utils.get_color_from_hex("#E0E0E0")
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
+<TabButton@ToggleButton>:
+    group: 'tabs'
+    background_normal: ''
+    background_down: ''
+    background_color: 0, 0, 0, 0
+    color: utils.get_color_from_hex("#8159EC") if self.state == 'down' else utils.get_color_from_hex("#AAAAAA")
+    size_hint: 0.2, 1
+    
 <BaseScreen>:
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#FFFFFF")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
 
         BoxLayout:
             id: content_layout
             orientation: 'vertical'
-            size_hint: (1, 0.8)
+            size_hint: (1, 0.9)
 
         BoxLayout:
             id: bottom_bar
             size_hint: (1, 0.1)
-            padding: 10
-            spacing: 10
+            padding: 5
+            spacing: 5
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#FFFFFF")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: utils.get_color_from_hex("#F0F0F0")
+                Line:
+                    points: [self.x, self.y + self.height - 1, self.x + self.width, self.y + self.height - 1]
+                    width: 1
 
-            Button:
-                id: btn_tela_1
-                text: "Foto"
-                size_hint: (0.2, 1)
-                background_color: root.get_color_from_hex("#FFFFFF")
-                color: root.get_color_from_hex("#000000")
-                on_press: root.go_to_screen("first_screen")
+            TabButton:
+                id: btn_home
+                on_press: root.go_to_screen("home_screen")
+                BoxLayout:
+                    orientation: 'vertical'
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    Label:
+                        text: "⌂"
+                        font_size: "18sp"
+                        color: self.parent.parent.color
+                    Label:
+                        text: "Home"
+                        font_size: "12sp"
+                        color: self.parent.parent.color
 
-            Button:
-                id: btn_tela_2
-                text: "Tela 2"
-                size_hint: (0.2, 1)
-                background_color: root.get_color_from_hex("#FFFFFF")
-                color: root.get_color_from_hex("#000000")
-                on_press: root.go_to_screen("second_screen")
+            TabButton:
+                id: btn_search
+                on_press: root.go_to_screen("search_screen")
+                BoxLayout:
+                    orientation: 'vertical'
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    Label:
+                        text: "🔍"
+                        font_size: "18sp"
+                        color: self.parent.parent.color
+                    Label:
+                        text: "Buscar"
+                        font_size: "12sp"
+                        color: self.parent.parent.color
 
-            Button:
-                id: btn_tela_3
-                text: "Tela 3"
-                size_hint: (0.2, 1)
-                background_color: root.get_color_from_hex("#FFFFFF")
-                color: root.get_color_from_hex("#000000")
-                on_press: root.go_to_screen("third_screen")
+            TabButton:
+                id: btn_scan
+                on_press: root.go_to_screen("scan_screen")
+                BoxLayout:
+                    orientation: 'vertical'
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    Label:
+                        text: "📷"
+                        font_size: "18sp"
+                        color: self.parent.parent.color
+                    Label:
+                        text: "Escan"
+                        font_size: "12sp"
+                        color: self.parent.parent.color
 
-            Button:
-                id: btn_tela_4
-                text: "Tela 4"
-                size_hint: (0.2, 1)
-                background_color: root.get_color_from_hex("#FFFFFF")
-                color: root.get_color_from_hex("#000000")
-                on_press: root.go_to_screen("fourth_screen")
+            TabButton:
+                id: btn_favorites
+                on_press: root.go_to_screen("favorites_screen")
+                BoxLayout:
+                    orientation: 'vertical'
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    Label:
+                        text: "♥"
+                        font_size: "18sp"
+                        color: self.parent.parent.color
+                    Label:
+                        text: "Favoritos"
+                        font_size: "12sp"
+                        color: self.parent.parent.color
 
-            Button:
-                id: btn_tela_5
-                text: "Perfil"
-                size_hint: (0.2, 1)
-                background_color: root.get_color_from_hex("#FFFFFF")
-                color: root.get_color_from_hex("#000000")
+            TabButton:
+                id: btn_profile
                 on_press: root.go_to_screen("fifth_screen")
+                BoxLayout:
+                    orientation: 'vertical'
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    Label:
+                        text: "👤"
+                        font_size: "18sp"
+                        color: self.parent.parent.color
+                    Label:
+                        text: "Perfil"
+                        font_size: "12sp"
+                        color: self.parent.parent.color
 
-<TelaDafoto>:
+<SplashScreen>:
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex("#8159EC")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
+        padding: "30dp"
+        spacing: "20dp"
+        
+        Label:
+            text: ""
+            size_hint: 1, 0.5
+            
+        Label:
+            text: "Zeph"
+            font_size: "48sp"
+            bold: True
+            color: utils.get_color_from_hex("#FFFFFF")
+            size_hint: 1, 0.3
+            
+        Label:
+            text: ""
+            size_hint: 1, 0.2
 
-        Button:
-            text: "Selecionar Imagem"
-            size_hint: (1, 0.1)
-            background_color: root.get_color_from_hex("#8159EC")
-            color: root.get_color_from_hex("#FFFFFF")
-            on_press: root.show_file_chooser()
+<OnboardingScreen1>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "10dp"
+        
+        Label:
+            text: "Zeph"
+            font_size: "26sp"
+            bold: True
+            color: utils.get_color_from_hex("#8159EC")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Image:
+            source: "path_to_your_image1.png"  # Replace with your image path
+            size_hint: 1, 0.4
+            
+        Label:
+            text: "Alimentação saudável"
+            font_size: "24sp"
+            bold: True
+            color: utils.get_color_from_hex("#333333")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Label:
+            text: "Acompanhe seus alimentos e mantenha uma dieta equilibrada com nosso app."
+            font_size: "16sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.15
+            halign: 'left'
+            text_size: self.width, None
+            
+        BoxLayout:
+            size_hint: 1, 0.05
+            spacing: "5dp"
+            
+            Widget:
+                size_hint_x: 0.4
+                
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#8159EC")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#DDDDDD")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#DDDDDD")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Widget:
+                size_hint_x: 0.4
+        
+        Widget:
+            size_hint: 1, 0.1
+            
+        RoundedButton:
+            text: "Começe"
+            font_size: "18sp"
+            size_hint: 1, 0.1
+            on_press: root.go_to_screen("onboarding2")
+            
+        Label:
+            text: "Você já possui uma conta? Faça login"
+            font_size: "14sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.1
+            
+<OnboardingScreen2>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "10dp"
+        
+        Label:
+            text: "Zeph"
+            font_size: "26sp"
+            bold: True
+            color: utils.get_color_from_hex("#8159EC")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Image:
+            source: "path_to_your_image2.png"  # Replace with your image path
+            size_hint: 1, 0.4
+            
+        Label:
+            text: "Receitas saudáveis"
+            font_size: "24sp"
+            bold: True
+            color: utils.get_color_from_hex("#333333")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Label:
+            text: "Tenha acesso a milhares de receitas e mantenha seus resultados de forma correta."
+            font_size: "16sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.15
+            halign: 'left'
+            text_size: self.width, None
+            
+        BoxLayout:
+            size_hint: 1, 0.05
+            spacing: "5dp"
+            
+            Widget:
+                size_hint_x: 0.4
+                
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#DDDDDD")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#8159EC")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Label:
+                size_hint: None, None
+                size: "10dp", "10dp"
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#DDDDDD")
+                    Ellipse:
+                        pos: self.pos
+                        size: self.size
+                        
+            Widget:
+                size_hint_x: 0.4
+        
+        Widget:
+            size_hint: 1, 0.1
+            
+        RoundedButton:
+            text: "Começe"
+            font_size: "18sp"
+            size_hint: 1, 0.1
+            on_press: root.go_to_screen("login_screen")
+            
+        Label:
+            text: "Você já possui uma conta? Faça login"
+            font_size: "14sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.1
 
+<LoginScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "10dp"
+        
+        Label:
+            text: "Zeph"
+            font_size: "26sp"
+            bold: True
+            color: utils.get_color_from_hex("#8159EC")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Label:
+            text: "Bem-vindo"
+            font_size: "24sp"
+            bold: True
+            color: utils.get_color_from_hex("#333333")
+            size_hint: 1, 0.05
+            halign: 'left'
+            text_size: self.width, None
+            
+        Label:
+            text: "Faça login, siga avaliações\nTenha o perfil personalizado"
+            font_size: "16sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.1
+            halign: 'left'
+            text_size: self.width, None
+            
+        Widget:
+            size_hint: 1, 0.05
+            
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 0.1
+            spacing: "5dp"
+            
+            Label:
+                text: "E-mail"
+                size_hint: 1, 0.3
+                halign: 'left'
+                text_size: self.width, None
+                color: utils.get_color_from_hex("#666666")
+                
+            TextInput:
+                id: email_input
+                hint_text: "exemplo@email.com"
+                size_hint: 1, 0.7
+                multiline: False
+                
+        Widget:
+            size_hint: 1, 0.02
+            
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 0.1
+            spacing: "5dp"
+            
+            Label:
+                text: "Senha"
+                size_hint: 1, 0.3
+                halign: 'left'
+                text_size: self.width, None
+                color: utils.get_color_from_hex("#666666")
+                
+            TextInput:
+                id: password_input
+                hint_text: "Sua senha"
+                password: True
+                size_hint: 1, 0.7
+                multiline: False
+                
+        Widget:
+            size_hint: 1, 0.03
+            
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            
+            Button:
+                text: "Cadastre-se"
+                font_size: "16sp"
+                size_hint: 0.4, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#8159EC")
+                
+            Widget:
+                size_hint: 0.2, 1
+                
+            RoundedButton:
+                text: "Entrar"
+                font_size: "16sp"
+                size_hint: 0.4, 1
+                
+        Widget:
+            size_hint: 1, 0.05
+            
+        Label:
+            text: "Ou entre usando"
+            font_size: "14sp"
+            color: utils.get_color_from_hex("#666666")
+            size_hint: 1, 0.05
+            
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            spacing: "10dp"
+            padding: "40dp"
+            
+            Button:
+                size_hint: 0.25, 1
+                background_normal: "path_to_facebook_icon.png"  # Replace with icon path
+                background_down: "path_to_facebook_icon.png"
+                
+            Button:
+                size_hint: 0.25, 1
+                background_normal: "path_to_google_icon.png"  # Replace with icon path
+                background_down: "path_to_google_icon.png"
+                
+            Button:
+                size_hint: 0.25, 1
+                background_normal: "path_to_pinterest_icon.png"  # Replace with icon path
+                background_down: "path_to_pinterest_icon.png"
+                
+            Button:
+                size_hint: 0.25, 1
+                background_normal: "path_to_linkedin_icon.png"  # Replace with icon path
+                background_down: "path_to_linkedin_icon.png"
+                
+        Widget:
+            size_hint: 1, 0.15
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "15dp"
+        spacing: "10dp"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            spacing: "10dp"
+            
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.7, 1
+                
+                Label:
+                    text: "Olá Shambhavi,"
+                    font_size: "20sp"
+                    bold: True
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    valign: 'bottom'
+                    text_size: self.width, None
+                    
+                Label:
+                    text: "Escolha, monitore e coma alimentos saudáveis"
+                    font_size: "12sp"
+                    color: utils.get_color_from_hex("#666666")
+                    halign: 'left'
+                    valign: 'top'
+                    text_size: self.width, None
+                    
+            Image:
+                source: "path_to_profile_image.png"  # Replace with profile image path
+                size_hint: 0.3, 1
+                
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 0.15
+            padding: "5dp"
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#F9F9F9")
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10]
+                    
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.5
+                
+                Label:
+                    text: "2700 kcal restantes"
+                    font_size: "14sp"
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.width, None
+                    padding: "10dp", 0
+                    
+                Button:
+                    text: "VISUALIZAR"
+                    size_hint: 0.3, 0.8
+                    pos_hint: {'center_y': 0.5}
+                    background_color: utils.get_color_from_hex("#8159EC")
+                    color: utils.get_color_from_hex("#FFFFFF")
+                    font_size: "12sp"
+                    
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.5
+                
+                Widget:
+                    size_hint: 0.1, 1
+                    
+                Widget:
+                    size_hint: 0.9, 1
+                    canvas:
+                        Color:
+                            rgba: utils.get_color_from_hex("#E0E0E0")
+                        Rectangle:
+                            pos: self.x, self.center_y - 3
+                            size: self.width, 6
+                            
+                        Color:
+                            rgba: utils.get_color_from_hex("#8159EC")
+                        Rectangle:
+                            pos: self.x, self.center_y - 3
+                            size: self.width * 0.6, 6  # Adjust based on progress
+                
+        Label:
+            text: "Escolha seus favoritos"
+            font_size: "18sp"
+            bold: True
+            color: utils.get_color_from_hex("#333333")
+            size_hint: 1, 0.05
+            halign: 'left'
+            text_size: self.width, None
+            
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            spacing: "10dp"
+            
+            Button:
+                text: "Diet lista"
+                size_hint: 0.5, 1
+                background_color: utils.get_color_from_hex("#F9F9F9")
+                color: utils.get_color_from_hex("#333333")
+                font_size: "16sp"
+                
+            Button:
+                text: "Frutas"
+                size_hint: 0.5, 1
+                background_color: utils.get_color_from_hex("#F9F9F9")
+                color: utils.get_color_from_hex("#333333")
+                font_size: "16sp"
+                
         ScrollView:
-            size_hint: (1, 0.7)
-
+            size_hint: 1, 0.6
+            
             GridLayout:
-                id: grid_layout
-                cols: 1
+                cols: 2
+                spacing: "10dp"
+                padding: "5dp"
                 size_hint_y: None
-                spacing: 10
-                padding: 10
                 height: self.minimum_height
+                
+                # Add your food items here as needed
+                # Example:
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "150dp"
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F9F9F9")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
+                    
+                    Image:
+                        source: "path_to_food_image1.png"  # Replace with food image
+                        size_hint: 1, 0.7
+                    
+                    Label:
+                        text: "Cenoura"
+                        size_hint: 1, 0.3
+                        color: utils.get_color_from_hex("#333333")
 
-        Label:
-            id: status_label
-            text: "Nenhuma imagem selecionada"
-            size_hint: (1, 0.1) 
-
-<SecondScreen>:
+<SearchScreen>:
     BoxLayout:
+        orientation: 'vertical'
+        padding: "15dp"
+        spacing: "10dp"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            spacing: "10dp"
+            
+            Button:
+                text: "←"
+                font_size: "24sp"
+                size_hint: 0.1, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+                
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 0.9, 1
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex("#F5F5F5")
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+                
+                Label:
+                    text: "🔍"
+                    size_hint: 0.1, 1
+                    font_size: "18sp"
+                    color: utils.get_color_from_hex("#666666")
+                    
+                TextInput:
+                    hint_text: "Ingredientes, pratos, produtos..."
+                    background_color: 0, 0, 0, 0
+                    foreground_color: utils.get_color_from_hex("#333333")
+                    size_hint: 0.9, 1
+                    multiline: False
+                    
         Label:
-            text: "Esta é a Tela 2"
-            font_size: 24
+            text: "Popular Agora"
+            font_size: "18sp"
+            bold: True
+            color: utils.get_color_from_hex("#333333")
+            size_hint: 1, 0.05
+            halign: 'left'
+            text_size: self.width, None
+            
+        ScrollView:
+            size_hint: 1, 0.85
+            
+            GridLayout:
+                cols: 2
+                spacing: "10dp"
+                padding: "5dp"
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Add your popular food items here
+                # Example:
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "150dp"
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F9F9F9")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
+                    
+                    Image:
+                        source: "path_to_food_image1.png"  # Replace with food image
+                        size_hint: 1, 0.7
+                    
+                    Label:
+                        text: "Cenoura"
+                        size_hint: 1, 0.3
+                        color: utils.get_color_from_hex("#333333")
 
-<ThirdScreen>:
+<ScanScreen>:
     BoxLayout:
-        Label:
-            text: "Esta é a Tela 3"
-            font_size: 24
+        orientation: 'vertical'
+        padding: "15dp"
+        spacing: "10dp"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            
+            Button:
+                text: "✕"
+                font_size: "24sp"
+                size_hint: 0.1, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+                on_press: root.go_to_screen("home_screen")
+                
+            Widget:
+                size_hint: 0.8, 1
+                
+            Button:
+                text: "⚡"
+                font_size: "24sp"
+                size_hint: 0.1, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+        
+        Image:
+            source: "path_to_camera_preview.png"  # Replace with camera preview or placeholder
+            size_hint: 1, 0.7
+            
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
+            padding: "20dp"
+            spacing: "20dp"
+            
+            Widget:
+                size_hint: 0.33, 1
+                
+            CircleButton:
+                text: "📷"
+                font_size: "24sp"
+                size_hint: 0.34, None
+                height: "60dp"
+                pos_hint: {'center_y': 0.5}
+                on_press: root.take_photo()
+                
+            Button:
+                text: "🖼️"
+                font_size: "20sp"
+                size_hint: 0.33, None
+                height: "40dp"
+                pos_hint: {'center_y': 0.5}
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+                on_press: root.choose_from_gallery()
 
-<FourthScreen>:
+<FavoritesScreen>:
     BoxLayout:
-        Label:
-            text: "Esta é a Tela 4"
-            font_size: 24
+        orientation: 'vertical'
+        padding: "15dp"
+        spacing: "10dp"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            
+            Label:
+                text: "Favoritos"
+                font_size: "22sp"
+                bold: True
+                color: utils.get_color_from_hex("#333333")
+                size_hint: 0.8, 1
+                halign: 'left'
+                text_size: self.width, None
+                
+            Button:
+                text: "Editar"
+                font_size: "16sp"
+                size_hint: 0.2, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#8159EC")
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            spacing: "10dp"
+            
+            ToggleButton:
+                text: "Comida"
+                group: 'favorites_tabs'
+                state: 'down'
+                size_hint: 0.5, 1
+                background_color: utils.get_color_from_hex("#8159EC") if self.state == 'down' else utils.get_color_from_hex("#F5F5F5")
+                color: utils.get_color_from_hex("#FFFFFF") if self.state == 'down' else utils.get_color_from_hex("#333333")
+                
+            ToggleButton:
+                text: "Receitas"
+                group: 'favorites_tabs'
+                size_hint: 0.5, 1
+                background_color: utils.get_color_from_hex("#8159EC") if self.state == 'down' else utils.get_color_from_hex("#F5F5F5")
+                color: utils.get_color_from_hex("#FFFFFF") if self.state == 'down' else utils.get_color_from_hex("#333333")
+                
+        ScrollView:
+            size_hint: 1, 0.8
+            
+            GridLayout:
+                cols: 4
+                spacing: "10dp"
+                padding: "5dp"
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Add your favorite food items here
+                # Example:
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "120dp"
+                    
+                    Button:
+                        background_normal: "path_to_food_icon1.png"  # Replace with food icon
+                        background_down: "path_to_food_icon1.png"
+                        size_hint: 1, 0.7
+                        
+                    Label:
+                        text: "Arroz"
+                        size_hint: 1, 0.3
+                        color: utils.get_color_from_hex("#333333")
+                        font_size: "14sp"
 
 <FifthScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 20
+        padding: "20dp"
+        spacing: "20dp"
 
         BoxLayout:
             orientation: 'vertical'
-            size_hint: (1, 0.3)
+            size_hint: 1, 0.3
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.8
+                
+                Widget:
+                    size_hint: 0.25, 1
+                
+                Image:
+                    source: "path_to_profile_image.png"  # Replace with profile image path
+                    size_hint: 0.5, 1
+                
+                Widget:
+                    size_hint: 0.25, 1
 
             Label:
                 text: "Shambhavi Mishra"
-                font_size: 24
+                font_size: "24sp"
                 bold: True
-                size_hint: (1, 0.5)
-                color: root.get_color_from_hex("#FFFFFF")
+                size_hint: 1, 0.1
+                color: utils.get_color_from_hex("#333333")
 
             Label:
                 text: "Food Blogger"
-                font_size: 18
-                size_hint: (1, 0.5)
-                color: root.get_color_from_hex("#666666")
+                font_size: "18sp"
+                size_hint: 1, 0.1
+                color: utils.get_color_from_hex("#666666")
 
         ScrollView:
-            size_hint: (1, 0.7)
+            size_hint: 1, 0.7
 
             GridLayout:
                 cols: 1
                 size_hint_y: None
-                spacing: 10
-                padding: 10
+                spacing: "15dp"
+                padding: "5dp"
                 height: self.minimum_height
 
                 Button:
                     text: "Editar perfil ➤"
                     size_hint_y: None
-                    height: 50
-                    background_color: root.get_color_from_hex("#FFFFFF")
-                    color: root.get_color_from_hex("#000000")
-                    background_normal: ""
-                    border: (0, 0, 0, 0)
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#FFFFFF")
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    text_size: self.width - 20, None
+                    padding: "20dp", 0
                     on_press: root.go_to_screen("profile_screen")
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F5F5F5")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
 
                 Button:
                     text: "Planos de renovação ➤"
                     size_hint_y: None
-                    height: 50
-                    background_color: root.get_color_from_hex("#FFFFFF")
-                    color: root.get_color_from_hex("#000000")
-                    background_normal: ""
-                    border: (0, 0, 0, 0)
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#FFFFFF")
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    text_size: self.width - 20, None
+                    padding: "20dp", 0
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F5F5F5")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
 
                 Button:
                     text: "Configurações ➤"
                     size_hint_y: None
-                    height: 50
-                    background_color: root.get_color_from_hex("#FFFFFF")
-                    color: root.get_color_from_hex("#000000")
-                    background_normal: ""
-                    border: (0, 0, 0, 0)
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#FFFFFF")
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    text_size: self.width - 20, None
+                    padding: "20dp", 0
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F5F5F5")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
 
                 Button:
                     text: "Termos e política de privacidade ➤"
                     size_hint_y: None
-                    height: 50
-                    background_color: root.get_color_from_hex("#FFFFFF")
-                    color: root.get_color_from_hex("#000000")
-                    background_normal: ""
-                    border: (0, 0, 0, 0)
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#FFFFFF")
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    text_size: self.width - 20, None
+                    padding: "20dp", 0
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F5F5F5")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
 
                 Button:
                     text: "Sair ➤"
                     size_hint_y: None
-                    height: 50
-                    background_color: root.get_color_from_hex("#FFFFFF")
-                    color: root.get_color_from_hex("#000000")
-                    background_normal: ""
-                    border: (0, 0, 0, 0)
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#FFFFFF")
+                    color: utils.get_color_from_hex("#333333")
+                    halign: 'left'
+                    text_size: self.width - 20, None
+                    padding: "20dp", 0
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#F5F5F5")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
+                    
+                Button:
+                    text: "Pesquisar receitas"
+                    size_hint_y: None
+                    height: "50dp"
+                    background_color: utils.get_color_from_hex("#8159EC")
+                    color: utils.get_color_from_hex("#FFFFFF")
+                    font_size: "16sp"
+                    canvas.before:
+                        Color:
+                            rgba: utils.get_color_from_hex("#8159EC")
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
 
 <ProfileScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 20
+        padding: "20dp"
+        spacing: "15dp"
 
-        Button:
-            text: "Voltar"
-            size_hint:(None, None)
-            size:(150, 50)
-            pos_hint:{'x': 0, 'top': 1} 
-            background_color: root.get_color_from_hex("#FFFFFF")
-            color: root.get_color_from_hex("#000000")
-            on_press: root.go_to_screen("fifth_screen")
-
-        Label:
-            text: "Editar Perfil"
-            font_size: 24
-            bold: True
-            size_hint: (1, 0.1)
-            color: root.get_color_from_hex("#FFFFFF")
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            
+            Button:
+                text: "←"
+                font_size: "24sp"
+                size_hint: 0.1, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+                on_press: root.go_to_screen("fifth_screen")
+                
+            Label:
+                text: "Editar Perfil"
+                font_size: "20sp"
+                bold: True
+                size_hint: 0.9, 1
+                color: utils.get_color_from_hex("#333333")
+                halign: 'left'
+                text_size: self.width, None
 
         ScrollView:
-            size_hint: (1, 0.8)
+            size_hint: 1, 0.8
 
             GridLayout:
                 id: form_layout
                 cols: 1
                 size_hint_y: None
-                spacing: 10
-                padding: 10
+                spacing: "15dp"
                 height: self.minimum_height
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "Name"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: name_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "Name"
+                        padding: "10dp", "10dp"
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "E-mail"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: email_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "E-mail"
+                        padding: "10dp", "10dp"
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "Senha"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: senha_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "Senha"
                         password: True
+                        padding: "10dp", "10dp"
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "Calorias diárias"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: calorias_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "Kcal"
+                        padding: "10dp", "10dp"
+                        input_type: 'number'
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "Carboidratos diários"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: carboidratos_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "carbo"
+                        padding: "10dp", "10dp"
+                        input_type: 'number'
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_y: None
-                    height: 80
+                    height: "80dp"
+                    spacing: "5dp"
 
                     Label:
                         text: "Proteína diária"
-                        size_hint: (1, 0.4)
+                        size_hint: 1, 0.4
                         halign: 'left'
                         valign: 'middle'
-                        color: root.get_color_from_hex("#000000")
-                        size: self.texture_size
+                        color: utils.get_color_from_hex("#333333")
+                        text_size: self.width, None
 
                     TextInput:
                         id: proteina_input
-                        size_hint: (1, 0.6)
+                        size_hint: 1, 0.6
                         multiline: False
                         hint_text: "protein"
+                        padding: "10dp", "10dp"
+                        input_type: 'number'
+                        canvas.before:
+                            Color:
+                                rgba: utils.get_color_from_hex("#F5F5F5")
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
 
         Button:
             text: "Confirme"
-            size_hint: (1, 0.1)
-            background_color: root.get_color_from_hex("#8159EC")
-            color: root.get_color_from_hex("#FFFFFF")
+            size_hint: 1, 0.1
+            background_color: utils.get_color_from_hex("#8159EC")
+            color: utils.get_color_from_hex("#FFFFFF")
+            font_size: "18sp"
             on_press: root.confirmar_dados()
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#8159EC")
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [25]
+
+<TelaDafoto>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "15dp"
+        spacing: "10dp"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            
+            Button:
+                text: "←"
+                font_size: "24sp"
+                size_hint: 0.1, 1
+                background_color: 0, 0, 0, 0
+                color: utils.get_color_from_hex("#333333")
+                on_press: root.go_to_screen("home_screen")
+                
+            Label:
+                text: "Escanear Alimento"
+                font_size: "20sp"
+                bold: True
+                size_hint: 0.9, 1
+                color: utils.get_color_from_hex("#333333")
+                halign: 'left'
+                text_size: self.width, None
+
+        Button:
+            text: "Selecionar Imagem"
+            size_hint: 1, 0.1
+            font_size: "16sp"
+            background_color: utils.get_color_from_hex("#8159EC")
+            color: utils.get_color_from_hex("#FFFFFF")
+            on_press: root.show_file_chooser()
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#8159EC")
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [25]
+
+        ScrollView:
+            size_hint: 1, 0.7
+
+            GridLayout:
+                id: grid_layout
+                cols: 1
+                size_hint_y: None
+                spacing: "10dp"
+                padding: "10dp"
+                height: self.minimum_height
+
+        Label:
+            id: status_label
+            text: "Nenhuma imagem selecionada"
+            size_hint: 1, 0.1
+            color: utils.get_color_from_hex("#666666")
