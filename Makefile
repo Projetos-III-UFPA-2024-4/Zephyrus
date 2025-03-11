@@ -6,7 +6,7 @@ SOURCE = src
 TESTS = tests
 
 # Comandos padrão
-.PHONY: help install test clean
+.PHONY: help install test clean server
 
 # Ajuda
 help:
@@ -14,6 +14,7 @@ help:
 	@echo "  make install    - Instala as dependências do projeto"
 	@echo "  make test       - Executa os testes"
 	@echo "  make clean      - Remove arquivos temporários e o ambiente virtual"
+	@echo "  make server     - Ativa o servidor local"
 	@echo "  make run        - Executa o projeto principal"
 
 # Instalar dependências
@@ -39,5 +40,9 @@ clean:
 # Executar o projeto principal
 run:
 
-#	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
 	. $(VENV)/bin/activate && $(PYTHON) app/main.py
+
+#ativar o servidor
+server:
+
+	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py

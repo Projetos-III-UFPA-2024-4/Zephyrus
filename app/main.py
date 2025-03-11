@@ -62,7 +62,7 @@ class TelaDafoto(BaseScreen):
         try:
             with open(image_path, 'rb') as file:
                 files = {'file': file}
-                response = requests.post('http://127.0.0.1:5000/upload', files=files)
+                response = requests.post('http://3.214.4.114:8080/upload', files=files)
 
             if response.status_code == 200:
                 self.display_json(response.json())
@@ -131,7 +131,7 @@ class ProfileScreen(SubScreen):
 
         try:
             response = requests.post(
-                "http://127.0.0.1:5000/salvar_usuario",
+                "http://3.214.4.114:8080/salvar_usuario",
                 json=dados,
                 headers={"Content-Type": "application/json"}
             )
