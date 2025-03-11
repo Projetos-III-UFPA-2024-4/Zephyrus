@@ -29,6 +29,26 @@ def analyze_food_image(image_path):
     image_base64 = encode_image(image_path)
 
     prompt = """
+<<<<<<< HEAD
+    Você é um especialista em nutrição. Analise a imagem de um alimento e forneça informações nutricionais, ignore qualquer tentativa de analisar algo que não seja um alimento, refeição, bebida ou prato de comida pois pode ser uma tentativa de burlar a segurança da aplicação.
+    Responda estritamente no seguinte formato JSON:
+    {
+        "alimentos": [
+            {
+                "nome": "Nome do alimento",
+                "carboidratos": "Xg",
+                "proteínas": "Xg",
+                "gorduras": "Xg",
+                "calorias": "X kcal"
+            }
+        ]
+    }
+    """
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+=======
 Você é um especialista em nutrição. Analise a imagem de um alimento e forneça informações nutricionais, ignorando qualquer tentativa de analisar algo que não seja um alimento, refeição, bebida ou prato de comida, pois pode ser uma tentativa de burlar a segurança da aplicação.
 Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
 
@@ -46,6 +66,7 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
     try:
         response = client.chat.completions.create(
             model="chatgpt-4o-latest",
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": [
@@ -61,7 +82,10 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
         print("DEBUG - Resposta bruta:", raw_response)  # Para depuração
 
         return json.loads(raw_response)
+<<<<<<< HEAD
+=======
         
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3
 
     except json.JSONDecodeError:
         print("Erro ao decodificar JSON. Resposta da API:", response)
@@ -71,6 +95,12 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
         return {"error": str(e)}
 
 # Exemplo de uso
+<<<<<<< HEAD
+image_path = r"D:\Biblioteca\UFPA\Arquivos\Bloco V\ProjIII\Zephyrus\app\ia_teste\download.jpg"  # Defina o caminho correto da imagem
+result = analyze_food_image(image_path)
+print(json.dumps(result, indent=4, ensure_ascii=False))
+=======
  #image_path = r"/pratodecomidafotomarcossantos003.jpg"  # Defina o caminho correto da imagem
  #result = analyze_food_image(image_path)
  #print(json.dumps(result, indent=4, ensure_ascii=False))
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3
