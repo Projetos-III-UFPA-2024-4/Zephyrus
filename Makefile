@@ -6,7 +6,11 @@ SOURCE = src
 TESTS = tests
 
 # Comandos padrão
+<<<<<<< HEAD
 .PHONY: help install test clean apk
+=======
+.PHONY: help install test clean server
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3
 
 # Ajuda
 help:
@@ -14,6 +18,7 @@ help:
 	@echo "  make install    - Instala as dependências do projeto"
 	@echo "  make test       - Executa os testes"
 	@echo "  make clean      - Remove arquivos temporários e o ambiente virtual"
+	@echo "  make server     - Ativa o servidor local"
 	@echo "  make run        - Executa o projeto principal"
 
 # Instalar dependências
@@ -40,6 +45,7 @@ clean:
 # Executar o projeto principal
 run:
 
+<<<<<<< HEAD
 #	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
 	$(PYTHON) app/main.py
 
@@ -47,3 +53,11 @@ apk:
 
 	buildozer android clean
 	buildozer -v android debug
+=======
+	. $(VENV)/bin/activate && $(PYTHON) app/main.py
+
+#ativar o servidor
+server:
+
+	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3

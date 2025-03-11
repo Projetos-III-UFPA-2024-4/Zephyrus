@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 pip install kivy, Flask, pillow, ChatOpenAI, telegram, langchain, langchain_openai, langchain-community, langchain-core, langgraph, langchainhub
 pip install python-dotenv
+=======
+pip install kivy, Flask, pillow, ChatOpenAI, telegram, langchain, langchain_openai, langchain-community, langchain-core, langgraph, langchainhub
+pip install python-dotenv
+>>>>>>> 4d734eca2dfc864100122ae88583ce95fc102de3
