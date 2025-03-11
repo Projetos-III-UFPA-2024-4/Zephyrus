@@ -13,13 +13,15 @@ from kivy.uix.textinput import TextInput # type: ignore
 import requests # type: ignore
 import json
 
-# Classe base para as telas
-class BaseScreen(Screen):
+class SubScreen(Screen):
     def go_to_screen(self, screen_name):
         self.manager.current = screen_name
 
     def get_color_from_hex(self, hex_color):
-        return get_color_from_hex(hex_color)
+        return get_color_from_hex(hex_color)  
+
+# Classe base para as telas
+class BaseScreen(SubScreen):
 
     def update_button_colors(self, current_screen):
         buttons = {
@@ -60,7 +62,7 @@ class TelaDafoto(BaseScreen):
         try:
             with open(image_path, 'rb') as file:
                 files = {'file': file}
-                response = requests.post('http://127.0.0.1:5000/upload', files=files)
+                response = requests.post('http://3.214.4.114:8080/upload', files=files)
 
             if response.status_code == 200:
                 self.display_json(response.json())
@@ -110,7 +112,11 @@ class FifthScreen(BaseScreen):
     pass
 
 # Tela de Perfil
-class ProfileScreen(BaseScreen):
+class ProfileScreen(SubScreen):
+
+    def go_to_screen(self, screen_name):
+        self.manager.current = screen_name
+
     def confirmar_dados(self):
         dados = {
             "name": self.ids.name_input.text,
@@ -125,7 +131,7 @@ class ProfileScreen(BaseScreen):
 
         try:
             response = requests.post(
-                "http://127.0.0.1:5000/salvar_usuario",
+                "http://3.214.4.114:8080/salvar_usuario",
                 json=dados,
                 headers={"Content-Type": "application/json"}
             )

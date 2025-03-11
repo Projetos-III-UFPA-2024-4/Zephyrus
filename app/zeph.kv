@@ -183,6 +183,15 @@
         padding: 20
         spacing: 20
 
+        Button:
+            text: "Voltar"
+            size_hint:(None, None)
+            size:(150, 50)
+            pos_hint:{'x': 0, 'top': 1} 
+            background_color: root.get_color_from_hex("#FFFFFF")
+            color: root.get_color_from_hex("#000000")
+            on_press: root.go_to_screen("fifth_screen")
+
         Label:
             text: "Editar Perfil"
             font_size: 24
