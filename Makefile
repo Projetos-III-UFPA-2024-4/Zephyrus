@@ -45,4 +45,4 @@ run:
 #ativar o servidor
 server:
 
-	. $(VENV)/bin/activate && $(PYTHON) servidor_teste/server.py
+	. $(VENV)/bin/activate && $(PYTHON) server.py

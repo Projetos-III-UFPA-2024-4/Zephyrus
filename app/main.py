@@ -1,28 +1,29 @@
-from kivy.app import App # type: ignore
-from kivy.uix.button import Button # type: ignore
-from kivy.uix.screenmanager import Screen, ScreenManager # type: ignore
-from kivy.uix.boxlayout import BoxLayout # type: ignore
-from kivy.uix.label import Label # type: ignore
-from kivy.uix.filechooser import FileChooserListView # type: ignore
-from kivy.uix.popup import Popup # type: ignore
-from kivy.uix.scrollview import ScrollView # type: ignore
-from kivy.uix.gridlayout import GridLayout # type: ignore
-from kivy.core.window import Window # type: ignore
-from kivy.utils import get_color_from_hex # type: ignore
-from kivy.uix.textinput import TextInput # type: ignore
-import requests # type: ignore
+from kivy.app import App  # type: ignore
+from kivy.uix.button import Button  # type: ignore
+from kivy.uix.screenmanager import Screen, ScreenManager  # type: ignore
+from kivy.uix.boxlayout import BoxLayout  # type: ignore
+from kivy.uix.label import Label  # type: ignore
+from kivy.uix.filechooser import FileChooserListView  # type: ignore
+from kivy.uix.popup import Popup  # type: ignore
+from kivy.uix.scrollview import ScrollView  # type: ignore
+from kivy.uix.gridlayout import GridLayout  # type: ignore
+from kivy.core.window import Window  # type: ignore
+from kivy.utils import get_color_from_hex  # type: ignore
+from kivy.uix.textinput import TextInput  # type: ignore
+from kivy.storage.jsonstore import JsonStore  # Adicionado
+import requests  # type: ignore
 import json
+import os  # Adicionado
 
 class SubScreen(Screen):
     def go_to_screen(self, screen_name):
         self.manager.current = screen_name
 
     def get_color_from_hex(self, hex_color):
-        return get_color_from_hex(hex_color)  
+        return get_color_from_hex(hex_color)
 
 # Classe base para as telas
 class BaseScreen(SubScreen):
-
     def update_button_colors(self, current_screen):
         buttons = {
             "first_screen": self.ids.btn_tela_1,
@@ -49,8 +50,6 @@ class TelaDafoto(BaseScreen):
         self.popup = Popup(title="Selecione uma imagem", content=self.file_chooser, size_hint=(0.9, 0.9))
         self.popup.open()
 
-
-
     def select_image(self, instance, selection, *args):
         if selection:
             self.selected_image = selection[0]
@@ -60,9 +59,18 @@ class TelaDafoto(BaseScreen):
 
     def upload_image(self, image_path):
         try:
+            user_id = self.get_user_id()  # Obtém o ID do usuário salvo
+            if not user_id:
+                self.ids.status_label.text = "Erro: ID do usuário não encontrado"
+                return
+
             with open(image_path, 'rb') as file:
                 files = {'file': file}
-                response = requests.post('http://3.214.4.114:8080/upload', files=files)
+                data = {
+                    'user_id': user_id,  # ID do usuário obtido dinamicamente
+                    'filename': os.path.basename(image_path)
+                }
+                response = requests.post('http://3.214.4.114:8080/upload', files=files, data=data)
 
             if response.status_code == 200:
                 self.display_json(response.json())
@@ -71,6 +79,13 @@ class TelaDafoto(BaseScreen):
                 self.ids.status_label.text = f"Erro ao enviar imagem: {response.json().get('error')}"
         except Exception as e:
             self.ids.status_label.text = f"Erro: {str(e)}"
+
+    def get_user_id(self):
+        # Carrega o ID do usuário do armazenamento
+        store = JsonStore('usuario.json')
+        if store.exists('user'):
+            return store.get('user')['id']
+        return None
 
     def display_json(self, json_data):
         self.ids.grid_layout.clear_widgets()
@@ -113,6 +128,9 @@ class FifthScreen(BaseScreen):
 
 # Tela de Perfil
 class ProfileScreen(SubScreen):
+    def __init__(self, **kwargs):
+        super(ProfileScreen, self).__init__(**kwargs)
+        self.store = JsonStore('usuario.json')  # Armazenamento do ID do usuário
 
     def go_to_screen(self, screen_name):
         self.manager.current = screen_name
@@ -127,8 +145,6 @@ class ProfileScreen(SubScreen):
             "proteina": self.ids.proteina_input.text,
         }
 
-        dados_json = json.dumps(dados, indent=4)
-
         try:
             response = requests.post(
                 "http://3.214.4.114:8080/salvar_usuario",
@@ -136,6 +152,11 @@ class ProfileScreen(SubScreen):
                 headers={"Content-Type": "application/json"}
             )
             if response.status_code == 200:
+                # Salva o ID retornado pelo servidor
+                user_id = response.json().get('user_id')
+                if user_id:
+                    self.store.put('user', id=user_id)
+                    print(f"ID do usuário salvo: {user_id}")
                 print("Dados enviados com sucesso!")
             else:
                 print(f"Erro ao enviar dados: {response.text}")

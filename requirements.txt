@@ -35,3 +35,6 @@ jsonlib-python3==1.6.1
 
 # Biblioteca para manipulação de arquivos YAML
 PyYAML==6.0
+
+# Biblioteca para manipulação de arquivos Excel (XLSX)
+openpyxl==3.1.2
