@@ -39,7 +39,6 @@ version = 0.1
 # comma separated e.g. requirements = sqlite3,kivy
 requirements = python3,kivy,requests,urllib3,chardet,idna,certifi
 
-
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
@@ -96,6 +95,7 @@ fullscreen = 0
 
 # (list) Permissions
 android.permissions = CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, INTERNET
+
 
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
 #android.permissions = android.permission.INTERNET, (name=android.permission.WRITE_EXTERNAL_STORAGE;maxSdkVersion=18)

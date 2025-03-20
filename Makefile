@@ -6,7 +6,7 @@ SOURCE = src
 TESTS = tests
 
 # Comandos padrão
-.PHONY: help install test clean server
+.PHONY: help install test clean server apk
 
 # Ajuda
 help:
@@ -21,6 +21,8 @@ help:
 install:
 	$(PYTHON) -m venv $(VENV)
 	. $(VENV)/bin/activate && $(PIP) install -r requirements.txt
+	pip install kivy, Flask, pillow, ChatOpenAI, telegram, langchain, langchain_openai, langchain-community, langchain-core, langgraph, langchainhub
+	pip install python-dotenv
 
 # Executar testes
 test:
@@ -46,3 +48,7 @@ run:
 server:
 
 	. $(VENV)/bin/activate && $(PYTHON) server.py
+
+apk:
+
+	buildozer --profile app/buildozer.spec -v android debug
