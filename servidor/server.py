@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify  # type: ignore
 import os
 import json
 from datetime import datetime
-from nutritionist import analyze_food_image  # type: ignore
+from servidor_.nutritionist import analyze_food_image  # type: ignore
 
 app = Flask(__name__)
 
