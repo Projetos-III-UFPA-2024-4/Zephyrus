@@ -94,19 +94,19 @@ def compare_food_diet(dados_paciente, data_comida):
     # Gera a sugestão com base nas diferenças
     sugestao = ""
     if diferenca_calorias > 0:
-        sugestao += "O prato tem mais calorias do que o recomendado. Considere reduzir a porção ou substituir ingredientes calóricos. "
+        sugestao += "O prato apresenta mais calorias do que o recomendado, considere reduzir a porção ou substituir ingredientes calóricos. "
     elif diferenca_calorias < 0:
-        sugestao += "O prato tem menos calorias do que o recomendado. Você pode adicionar ingredientes nutritivos para atingir sua meta. "
+        sugestao += "O prato apresenta menos calorias do que o recomendado, você pode adicionar ingredientes nutritivos para atingir sua meta. "
 
     if diferenca_proteina > 0:
-        sugestao += "O prato contém mais proteína do que o necessário. Ajuste a quantidade de proteína para alinhar com sua dieta. "
+        sugestao += "Também há um teor proteico maior do que o necessário, ajuste a quantidade de proteína para alinhar com sua dieta. "
     elif diferenca_proteina < 0:
-        sugestao += "O prato contém menos proteína do que o necessário. Adicione uma fonte de proteína, como frango ou tofu. "
+        sugestao += "Também há um teor proteico menor do que o necessário, adicione uma fonte de proteína, como frango ou tofu. "
 
     if diferenca_carboidratos > 0:
-        sugestao += "O prato contém mais carboidratos do que o recomendado. Reduza a quantidade de carboidratos ou substitua por opções integrais. "
+        sugestao += "A quantidade de carboidratos é maior do que o recomendado, reduza a quantidade de carboidratos ou substitua por opções integrais. "
     elif diferenca_carboidratos < 0:
-        sugestao += "O prato contém menos carboidratos do que o recomendado. Adicione carboidratos saudáveis, como quinoa ou batata-doce. "
+        sugestao += "A quantidade de carboidratos é menor do que o recomendado, adicione carboidratos saudáveis, como quinoa ou batata-doce. "
 
     # Adiciona a sugestão ao JSON de resposta
     data_comida["sua dieta"] = sugestao.strip()
