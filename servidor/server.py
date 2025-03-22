@@ -48,9 +48,9 @@ def upload_image():
     with engine.connect() as connection:
         # Executa a consulta para buscar os dados do paciente
         query = text("""
-            SELECT proteina, calorias, gordura, carboidratos
+            SELECT proteinas, calorias, carboidratos
             FROM Pacientes
-            WHERE id = :user_id
+            WHERE id_paciente = :user_id
         """)
         result = connection.execute(query, {"user_id": user_id})
         dados = result.fetchone()  # Obtém a primeira linha do resultado
@@ -61,9 +61,8 @@ def upload_image():
 
         # Formata os dados em um dicionário
         dados_paciente = {
-            "proteina": f"{dados.proteina}g",
+            "proteinas": f"{dados.proteinas}g",
             "calorias": f"{dados.calorias} kcal",
-            "gordura": f"{dados.gordura}g",
             "carboidratos": f"{dados.carboidratos}g"
         }
     #colocar as conexões com o banco de dados aqui
