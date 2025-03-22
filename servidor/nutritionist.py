@@ -1,10 +1,10 @@
 import base64
 import json
 import os
-from openai import OpenAI
-from langchain_openai import ChatOpenAI
-from langchain.schema import SystemMessage, HumanMessage
-from dotenv import load_dotenv
+from openai import OpenAI   # type: ignore
+from langchain_openai import ChatOpenAI # type: ignore
+from langchain.schema import SystemMessage, HumanMessage    # type: ignore
+from dotenv import load_dotenv  # type: ignore
 
 load_dotenv()
 
@@ -35,10 +35,9 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
 {
     "proteina": "Xg",
     "calorias": "X kcal",
-    "gordura": "Xg",
     "carboidratos": "Xg",
     "detalhes": "Descrição detalhada do alimento identificado.",
-    "sua dieta": "Sugestão sobre como esse alimento pode se encaixar em uma dieta balanceada."
+    "sua dieta": "Compare os dados de proteina, calorias, gorduras e carboidratos, com os descritos no json do paciente e de uma sujetão de como adaptar o prato para sua meta."
 }
 """
 
@@ -74,3 +73,42 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
  #image_path = r"/pratodecomidafotomarcossantos003.jpg"  # Defina o caminho correto da imagem
  #result = analyze_food_image(image_path)
  #print(json.dumps(result, indent=4, ensure_ascii=False))
+
+def compare_food_diet(dados_paciente, data_comida):
+
+    # Extrai os dados do paciente
+    proteina_paciente = float(dados_paciente["proteinas"].replace("g", ""))
+    calorias_paciente = float(dados_paciente["calorias"].replace(" kcal", ""))
+    carboidratos_paciente = float(dados_paciente["carboidratos"].replace("g", ""))
+
+    # Extrai os dados do alimento
+    proteina_comida = float(data_comida["proteina"].replace("g", ""))
+    calorias_comida = float(data_comida["calorias"].replace(" kcal", ""))
+    carboidratos_comida = float(data_comida["carboidratos"].replace("g", ""))
+
+    # Calcula as diferenças
+    diferenca_proteina = proteina_comida - proteina_paciente
+    diferenca_calorias = calorias_comida - calorias_paciente
+    diferenca_carboidratos = carboidratos_comida - carboidratos_paciente
+
+    # Gera a sugestão com base nas diferenças
+    sugestao = ""
+    if diferenca_calorias > 0:
+        sugestao += "O prato tem mais calorias do que o recomendado. Considere reduzir a porção ou substituir ingredientes calóricos. "
+    elif diferenca_calorias < 0:
+        sugestao += "O prato tem menos calorias do que o recomendado. Você pode adicionar ingredientes nutritivos para atingir sua meta. "
+
+    if diferenca_proteina > 0:
+        sugestao += "O prato contém mais proteína do que o necessário. Ajuste a quantidade de proteína para alinhar com sua dieta. "
+    elif diferenca_proteina < 0:
+        sugestao += "O prato contém menos proteína do que o necessário. Adicione uma fonte de proteína, como frango ou tofu. "
+
+    if diferenca_carboidratos > 0:
+        sugestao += "O prato contém mais carboidratos do que o recomendado. Reduza a quantidade de carboidratos ou substitua por opções integrais. "
+    elif diferenca_carboidratos < 0:
+        sugestao += "O prato contém menos carboidratos do que o recomendado. Adicione carboidratos saudáveis, como quinoa ou batata-doce. "
+
+    # Adiciona a sugestão ao JSON de resposta
+    data_comida["sua dieta"] = sugestao.strip()
+
+    return data_comida
