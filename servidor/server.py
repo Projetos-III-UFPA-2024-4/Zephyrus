@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify  # type: ignore
 import os
 import json
 from datetime import datetime
-from servidor_.nutritionist import analyze_food_image  # type: ignore
+from nutritionist import analyze_food_image,compare_food_diet  # type: ignore
+from sqlalchemy import create_engine, text  # type: ignore
 
 app = Flask(__name__)
 
@@ -11,10 +12,9 @@ UPLOAD_FOLDER = "uploads"
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# Pasta para armazenar os dados dos usuários
-USUARIOS_DIR = "usuarios"
-if not os.path.exists(USUARIOS_DIR):
-    os.makedirs(USUARIOS_DIR)
+connection_string = "mysql+pymysql://admin:Zeph1995@bancozeph.c5hlhhcsllwc.us-east-1.rds.amazonaws.com:3306/bancozeph"
+engine = create_engine(connection_string, echo=False)
+
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
@@ -40,12 +40,41 @@ def upload_image():
     file.save(file_path)
 
     # Analisa a imagem
-    response_data = analyze_food_image(file_path)
+    data_comida = analyze_food_image(file_path)
+
+     #colocar as conexões com o banco de dados aqui
+
+    # Conecta ao banco de dados
+    with engine.connect() as connection:
+        # Executa a consulta para buscar os dados do paciente
+        query = text("""
+            SELECT proteina, calorias, gordura, carboidratos
+            FROM Pacientes
+            WHERE id = :user_id
+        """)
+        result = connection.execute(query, {"user_id": user_id})
+        dados = result.fetchone()  # Obtém a primeira linha do resultado
+
+        # Verifica se o paciente foi encontrado
+        if not dados:
+            return jsonify({"erro": "Paciente não encontrado"}), 404
+
+        # Formata os dados em um dicionário
+        dados_paciente = {
+            "proteina": f"{dados.proteina}g",
+            "calorias": f"{dados.calorias} kcal",
+            "gordura": f"{dados.gordura}g",
+            "carboidratos": f"{dados.carboidratos}g"
+        }
+    #colocar as conexões com o banco de dados aqui
+
+    response_data = compare_food_diet(dados_paciente,data_comida)
 
     # Adiciona o ID do usuário à resposta
     response_data["user_id"] = user_id
-
+    print(response_data)
     return jsonify(response_data), 200
+
 
 @app.route("/salvar_usuario", methods=["POST"])
 def salvar_usuario():
@@ -53,16 +82,27 @@ def salvar_usuario():
         # Recebe os dados do formulário
         dados = request.json
 
-        # Gera um ID único para o usuário
-        usuario_id = len(os.listdir(USUARIOS_DIR)) + 1
+        # Extrai os dados do JSON
+        nome = dados.get("name")
+        email = dados.get("email")
+        senha = dados.get("senha")
+        calorias = dados.get("calorias")
+        carboidratos = dados.get("carboidratos")
+        proteinas = dados.get("proteina")
 
-        # Salva os dados em um arquivo JSON
-        arquivo_usuario = os.path.join(USUARIOS_DIR, f"usuario_{usuario_id}.json")
-        with open(arquivo_usuario, "w") as f:
-            json.dump(dados, f, indent=4)
+        # Insere os dados no banco de dados
+        with engine.connect() as connection:
+            result = connection.execute(
+                text("INSERT INTO Pacientes (nome, email, senha, calorias, carboidratos, proteinas) VALUES (:nome, :email, :senha, :calorias, :carboidratos, :proteinas)"),
+                {"nome": nome, "email": email, "senha": senha, "calorias": calorias, "carboidratos": carboidratos, "proteinas": proteinas}
+            )
+            connection.commit()
 
-        # Retorna o ID do usuário
-        return jsonify({"message": "Dados salvos com sucesso!", "user_id": usuario_id}), 200
+            # Obtém o ID do paciente inserido
+            paciente_id = result.lastrowid
+
+        # Retorna o ID do paciente criado
+        return jsonify({"message": "Dados salvos com sucesso!", "user_id": paciente_id}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
