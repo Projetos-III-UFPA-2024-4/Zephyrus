@@ -7,13 +7,16 @@ from kivy.uix.filechooser import FileChooserListView  # type: ignore
 from kivy.uix.popup import Popup  # type: ignore
 from kivy.uix.scrollview import ScrollView  # type: ignore
 from kivy.uix.gridlayout import GridLayout  # type: ignore
-from kivy.core.window import Window  # type: ignore
+from kivy.core.window import Window  # type: ignoreS
 from kivy.utils import get_color_from_hex  # type: ignore
 from kivy.uix.textinput import TextInput  # type: ignore
 from kivy.storage.jsonstore import JsonStore  # Adicionado
+from dotenv import load_dotenv  # type: ignore
 import requests  # type: ignore
 import json
 import os  # Adicionado
+
+load_dotenv()
 
 class SubScreen(Screen):
     def go_to_screen(self, screen_name):
@@ -70,7 +73,7 @@ class TelaDafoto(BaseScreen):
                     'user_id': user_id,  # ID do usuário obtido dinamicamente
                     'filename': os.path.basename(image_path)
                 }
-                response = requests.post('http://3.214.4.114:8080/upload', files=files, data=data)
+                response = requests.post(os.getenv("UPLOAD"), files=files, data=data)
 
             if response.status_code == 200:
                 self.display_json(response.json())
@@ -92,7 +95,6 @@ class TelaDafoto(BaseScreen):
         self.add_label("**Informações Nutricionais**", font_size=18, bold=True)
         self.add_label(f"Proteína: {json_data.get('proteina', 'N/A')}")
         self.add_label(f"Calorias: {json_data.get('calorias', 'N/A')}")
-        self.add_label(f"Gordura: {json_data.get('gordura', 'N/A')}")
         self.add_label(f"Carboidratos: {json_data.get('carboidratos', 'N/A')}")
         self.add_label("**Detalhes**", font_size=18, bold=True)
         self.add_label(json_data.get('detalhes', 'N/A'))
@@ -147,7 +149,7 @@ class ProfileScreen(SubScreen):
 
         try:
             response = requests.post(
-                "http://3.214.4.114:8080/salvar_usuario",
+                os.getenv("SAVE_USER"),
                 json=dados,
                 headers={"Content-Type": "application/json"}
             )
