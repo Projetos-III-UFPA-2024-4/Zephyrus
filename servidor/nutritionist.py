@@ -23,7 +23,7 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
-def analyze_food_image(image_path,user_data):
+def analyze_food_image(image_path):
 
     #Envia a imagem para a API OpenAI e retorna dados nutricionais em JSON
     image_base64 = encode_image(image_path)
