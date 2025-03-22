@@ -35,7 +35,6 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
 {
     "proteina": "Xg",
     "calorias": "X kcal",
-    "gordura": "Xg",
     "carboidratos": "Xg",
     "detalhes": "Descrição detalhada do alimento identificado.",
     "sua dieta": "Compare os dados de proteina, calorias, gorduras e carboidratos, com os descritos no json do paciente e de uma sujetão de como adaptar o prato para sua meta."
@@ -78,21 +77,18 @@ Responda estritamente no seguinte formato, sem nenhuma explicação adicional:
 def compare_food_diet(dados_paciente, data_comida):
 
     # Extrai os dados do paciente
-    proteina_paciente = float(dados_paciente["proteina"].replace("g", ""))
+    proteina_paciente = float(dados_paciente["proteinas"].replace("g", ""))
     calorias_paciente = float(dados_paciente["calorias"].replace(" kcal", ""))
-    gordura_paciente = float(dados_paciente["gordura"].replace("g", ""))
     carboidratos_paciente = float(dados_paciente["carboidratos"].replace("g", ""))
 
     # Extrai os dados do alimento
     proteina_comida = float(data_comida["proteina"].replace("g", ""))
     calorias_comida = float(data_comida["calorias"].replace(" kcal", ""))
-    gordura_comida = float(data_comida["gordura"].replace("g", ""))
     carboidratos_comida = float(data_comida["carboidratos"].replace("g", ""))
 
     # Calcula as diferenças
     diferenca_proteina = proteina_comida - proteina_paciente
     diferenca_calorias = calorias_comida - calorias_paciente
-    diferenca_gordura = gordura_comida - gordura_paciente
     diferenca_carboidratos = carboidratos_comida - carboidratos_paciente
 
     # Gera a sugestão com base nas diferenças
@@ -106,11 +102,6 @@ def compare_food_diet(dados_paciente, data_comida):
         sugestao += "O prato contém mais proteína do que o necessário. Ajuste a quantidade de proteína para alinhar com sua dieta. "
     elif diferenca_proteina < 0:
         sugestao += "O prato contém menos proteína do que o necessário. Adicione uma fonte de proteína, como frango ou tofu. "
-
-    if diferenca_gordura > 0:
-        sugestao += "O prato tem mais gordura do que o recomendado. Reduza o uso de óleos ou gorduras. "
-    elif diferenca_gordura < 0:
-        sugestao += "O prato tem menos gordura do que o recomendado. Considere adicionar gorduras saudáveis, como abacate ou azeite. "
 
     if diferenca_carboidratos > 0:
         sugestao += "O prato contém mais carboidratos do que o recomendado. Reduza a quantidade de carboidratos ou substitua por opções integrais. "
