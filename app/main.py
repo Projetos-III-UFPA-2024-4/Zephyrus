@@ -89,14 +89,13 @@ class TelaDafoto(BaseScreen):
 
     def display_json(self, json_data):
         self.ids.grid_layout.clear_widgets()
-        self.add_label("**Informações Nutricionais**", font_size=18, bold=True)
+        self.add_label("**Informações Nutricionais**", font_size=32, bold=True)
         self.add_label(f"Proteína: {json_data.get('proteina', 'N/A')}")
         self.add_label(f"Calorias: {json_data.get('calorias', 'N/A')}")
-        self.add_label(f"Gordura: {json_data.get('gordura', 'N/A')}")
         self.add_label(f"Carboidratos: {json_data.get('carboidratos', 'N/A')}")
-        self.add_label("**Detalhes**", font_size=18, bold=True)
+        self.add_label("**Detalhes**", font_size=32, bold=True)
         self.add_label(json_data.get('detalhes', 'N/A'))
-        self.add_label("**Sua Dieta**", font_size=18, bold=True)
+        self.add_label("**Sua Dieta**", font_size=32, bold=True)
         self.add_label(json_data.get('sua dieta', 'N/A'))
 
     def add_label(self, text, font_size=14, bold=False):
